@@ -1,0 +1,42 @@
+$----------------------------------------------------------—
+
+DIMENSIONS
+
+NODAL_POINTS=       5682            $ number of nodes
+ELEMENTS=       26410           $ number of elements
+SPACE_DIMENSIONS=   3           $ 3D mesh
+TYPES_OF_ELEMENTS=      30          $ 4 node tetrahedral elements   
+BOUNDARIES=     4046            $ number of boundary edges
+END_DIMENSIONS
+
+$----------------------------------------------------------—
+
+STRATEGY
+
+INTEGRATION_RULE:       Open        $ open rule is the default
+DOMAIN_INTEGRATION_POINTS:  0           $ 0 = automatic, depending on each element type 
+END_STRATEGY
+
+$----------------------------------------------------------—
+
+GEOMETRY
+
+ GROUPS=100                     $ number of groups (for deflation based solvers)
+ INCLUDE        elbow.geo.dat           $ include geometry file (nodes, elements & boundaries)
+END_GEOMETRY
+
+$----------------------------------------------------------—
+
+SETS
+
+ INCLUDE        elbow.set.dat           $ include set file (groups for post-processing)
+END_SETS
+
+$----------------------------------------------------------—
+
+BOUNDARY_CONDITIONS, EXTRAPOLATE $ edge BC’s extrapolate to nodes
+
+ INCLUDE        elbow.fix.dat           $ include boundary conditions file
+END_BOUNDARY_CONDITIONS
+
+$----------------------------------------------------------—

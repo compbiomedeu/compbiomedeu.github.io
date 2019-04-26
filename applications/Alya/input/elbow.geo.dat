@@ -1,0 +1,53 @@
+$----------------------------------------------------------—
+
+NODES_PER_ELEMENT
+
+    1 4                     $ element number, # nodes
+    2 4
+    3 4
+     :
+     :
+    26409 4
+    26410 4
+END_NODES_PER_ELEMENT
+
+$----------------------------------------------------------—
+
+ELEMENTS (element connectivity list)
+
+    1 5585 5586 5518 5562               $ element number, node number 1, node number 2, ...  
+    2 5660 5630 5629 5613
+    3 5676 5662 5647 5666
+            :
+        :
+    26409 1638 1433 1313 1315  
+    26410 1491 1638 1313 1315  
+END_ELEMENTS
+
+$----------------------------------------------------------—
+
+COORDINATES
+
+    1   1.638713e+00 -2.971132e+00  2.893691e-02    $ node number, coord X, coord Y , coord Z  
+    2   1.533333e+00 -2.971132e+00  2.886751e-02   
+    3   1.873338e+00 -2.971128e+00  2.852064e-01      
+        :
+        :
+    5681   1.045415e+00  0.000000e+00  0.000000e+00   
+    5682   1.000000e+00  0.000000e+00  0.000000e+00   
+END_COORDINATES
+
+$----------------------------------------------------------—
+
+BOUNDARIES, ELEMENT
+
+1  5681 5676 5682   9402            $ boundary element #, node #s, element # boundary belongs to 
+2  5666 5676 5681   9399 
+3  5666 5638 5660   9763 
+     :
+     :
+4045  54 71 12   24996 
+4046  12 67 54   26111
+END_BOUNDARIES MATERIALS, NUMBER=0, DEFAULT=1 $ vall elements have material 1 END_MATERIALS CHARACTERISTICS END_CHARACTERISTICS
+
+$----------------------------------------------------------—

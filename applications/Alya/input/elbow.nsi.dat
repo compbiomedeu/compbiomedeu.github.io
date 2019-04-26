@@ -1,0 +1,88 @@
+$---------------------------------------------------------—
+
+PHYSICAL_PROBLEM
+
+PROBLEM_DEFINITION       
+    TEMPORAL_DERIVATIVES:   On      $ transient problem
+    CONVECTIVE_TERM:    On      $ off for Stokes flow (negligible for high viscosity fluids)
+    VISCOUS_TERM:       LAPLACIAN   $ suitable for constant viscosity fluid assumption
+END_PROBLEM_DEFINITION  
+END_PHYSICAL_PROBLEM
+
+$---------------------------------------------------------—
+
+NUMERICAL_TREATMENT
+
+ELEMENT_LENGTH: Minimum             $ element length for Alya to calculate critical time step
+STABILIZATION:      ASGS            $ numerical stabilization method
+TIME_INTEGRATION:   Trapezoidal, ORDER: 1, EULER=20     $ time integration scheme
+SAFETY_FACTOR:      100.0           $ multiply global time step: Alya calculates critical time step
+                          as required by explicit solvers, which is suited for transient
+                          analysis but makes stationary solutions converge very slowly
+STEADY_STATE_TOLER: 1.0e-10         $ convergence tolerance for steady state
+MAXIMUM_NUMBER_OF_IT:   1           $ max number of inner NS iterations 
+CONVERGENCE_TOLERANCE:  1.0e-3          $ convergence tolerance for inner NS loop (useless in this case)
+ALGORITHM:      SCHUR           $ NS solution algorithm (uncouples p & V)
+       SOLVER: ORTHOMIN, CONTINUITY_PRESERVING  $ default is MOMENTUM_PRESERVING 
+       PRECONDITION: DT 
+END_ALGORITHM
+MOMENTUM                    $ velocity solver
+   ALGEBRAIC_SOLVER     
+        SOLVER:     GMRES, KRYLOV=10    $ solver suited for asymmetric matrix
+        CONVERGENCE:    ITERA=1000, TOLER=1.0e-12, ADAPTIVE, RATIO=0.01   $ max iter #, convergence criteria
+                                        ADAPTIVE, RATIO=0.01 means that the loop                                              will end also if the difference of the                                                norm of convergence value changes less                                                than 1% in two consecutive iterations
+            OUTPUT:     CONVERGENCE     $ solver convergence file (.cso) is generated
+            PRECONDITIONER: DIAGONAL        $ matrix preconditioner type
+       END_ALGEBRAIC_SOLVER        
+END_MOMENTUM
+CONTINUITY                  $ pressure solver
+       ALGEBRAIC_SOLVER
+            SOLVER:     DEFLATED_CG, COARSE: SPARSE $ CG solvers are suited for symmetric matrix
+            CONVERGENCE:    ITERA=1000, TOLER=1.0e-12, ADAPTIVE, RATIO=0.01   $ max iter #, convergence criteria
+                                        ADAPTIVE, RATIO=0.01 means that the loop                                            will end also if the difference of the                                          norm of convergence value changes less                                          than 1% in two consecutive iterations
+            OUTPUT:     CONVERGENCE         $ solver convergence file (.cso) is generated
+            PRECONDITIONER: DIAGONAL            $ matrix preconditioner type
+       END_ALGEBRAIC_SOLVER        
+END_CONTINUITY
+END_NUMERICAL_TREATMENT
+
+$---------------------------------------------------------—
+
+OUTPUT_&_POST_PROCESS
+
+START_POSTPROCES_AT STEP = 0            $ initial step to post process
+POSTPROCESS VELOCITY    STEPS = 10          $ post process velocity every 10 steps (priority ker.dat)
+POSTPROCESS PRESSURE    STEPS = 10          $ post process pressure every 10 steps (priority ker.dat)
+POSTPROCESS MEAN_PRESSURE, STEPS = 1
+BOUNDARY_SET
+   FORCE
+       TORQUE, CENTER=0,0,0
+       MASS
+       MEAN_PRESSURE
+END_BOUNDARY_SET
+END_OUTPUT_&_POST_PROCESS
+
+$---------------------------------------------------------—
+
+BOUNDARY_CONDITIONS
+
+PARAMETERS
+           VARIATION:    NON_CONSTANT           $ there will be parameters specifyed by function
+           INITIAL: COARSE                      $ domain velocity initialization
+END_PARAMETERS
+CODES, NODES                        $ Boundary Conditions
+       1  000  0.000000  0.000000 0.000000              $ outlet
+       2  111  1.000000  0.000000 0.000000, SPACE_TIME_FUNCTION=INFLOW      $ inlet 
+       3  111  0.000000  0.000000 0.000000              $ wall
+       4  001  0.000000  0.000000 0.000000              $ symmetry
+       1 & 3  111  0.000000  0.000000 0.000000          $ edges...
+       1 & 4  001  0.000000  0.000000 0.000000
+       2 & 3  111  0.000000  0.000000 0.000000
+       2 & 4  111  1.000000  0.000000 0.000000, SPACE_TIME_FUNCTION=INFLOW  $ inlet
+       3 & 4  111  0.000000  0.000000 0.000000
+       1 & 3 & 4  111  0.000000  0.000000 0.000000          $ $ vertex...
+       2 & 3 & 4  111  0.000000 0.000000  0.000000     
+END_CODES                   $ inlet(note that BC’s apply to boundaries, not to boundary sets)
+END_BOUNDARY_CONDITIONS
+
+$---------------------------------------------------------—

@@ -1,0 +1,22 @@
+$----------------------------------------------------------—
+
+RUN_DATA
+
+ALYA:                   elbow           $ case name
+END_RUN_DATA
+
+$----------------------------------------------------------—
+
+PROBLEM_DATA
+
+    TIME_COUPLING:  Global, From_critical       $ global time step is prescribed
+    TIME_INTERVAL=  0.0, 1.0e6          $ integration time domain from t=0 to t=10s
+    NUMBER_OF_STEPS=  1e5               $ infinite time steps
+    MAXIMUM_NUMBER_GLOBAL= 1            $ only used when coupling modules
+    NASTIN_MODULE:  On              $ nastin module (Incompressible Navier-Stokes) is used
+    END_NASTIN_MODULE
+    PARALL_SERVICE:         On
+    END_PARALL_SERVICE
+END_PROBLEM_DATA
+
+$----------------------------------------------------------—

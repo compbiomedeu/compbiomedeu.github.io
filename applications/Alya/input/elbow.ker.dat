@@ -1,0 +1,39 @@
+$---------------------------------------------------------—
+
+PHYSICAL_PROBLEM
+
+PROPERTIES                      $ fluid physical properties (water)
+    DENSITY:      CONSTANT, PARAMETERS = 1.0    $ mass density
+    VISCOSITY:   CONSTANT, PARAMETERS = 0.0005  $ dynamic viscosity (μ)
+END_PROPERTIES
+END_PHYSICAL_PROBLEM
+
+$---------------------------------------------------------—
+
+NUMERICAL_TREATMENT
+
+MESH                            
+     DIVISION=1                     $ 2 automatic mesh subdivisions
+END_MESH
+ELSEST                          $ element search strategy 
+   STRATEGY: BIN                      BIN divide mesh into boxes to find elements that host 
+                              witness points (suited for structured meshes)
+   NUMBER: 20, 20, 20
+   DATAF: LINKED_LIST
+END_ELSEST
+SPACE_&_TIME_FUNCTIONS
+   FUNCTION=INFLOW                  
+        -4*y**2-4*z**2+12*y-8               $ paraboloid surface function (Umax=1)
+   END_FUNCTION
+END_SPACE_&_TIME_FUNCTIONS                      
+END_NUMERICAL_TREATMENT
+
+$---------------------------------------------------------—
+
+OUTPUT_&_POST_PROCESS
+
+    ON_LAST_MESH
+    STEPS=10                        $ post-process every ‘STEPS’ time steps
+END_OUTPUT_&_POST_PROCESS
+
+$---------------------------------------------------------—

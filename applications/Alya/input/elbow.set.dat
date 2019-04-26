@@ -1,0 +1,36 @@
+$----------------------------------------------------------—
+
+ELEMENTS
+
+1 1                     $ element number, set number
+2 1
+3 1
+     :
+     :
+     :
+26409 1
+26410 1
+END_ELEMENTS
+
+$----------------------------------------------------------—
+
+BOUNDARIES (boundary sets definition)
+
+    1 2                     $ boundary element number, boundary set number
+    2 2
+    3 2
+     :
+     :
+     :
+    4045 13
+    4046 13                         
+END_BOUNDARIES
+
+$----------------------------------------------------------—
+
+NODES (node sets definition)
+
+0
+END_NODES
+
+$----------------------------------------------------------—
