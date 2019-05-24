@@ -47,19 +47,16 @@ HemeLB is written in C++. HemeLB uses professional software engineering techniqu
 ### Prerequisites
 
 To compile an installation of HemeLB capable to run the provided example, the following software is required:
-- C and Fortran compilers (Intel/GNU)
-- An MPI installation 
-- [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) (optional; internal provided)
-
-- C and C++ compilers
-- an MPI installation
+- C and C++ compilers (Intel/GNU)
+- MPI
 - CMake
-- TinyXML
+- Zlib
+- Boost
+- [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) 
 - ParMETIS
+- TinyXML
 - CPPUnit
 - CTemplate
-- Boost
-- Zlib
 
 TinyXML, ParMETIS, CPPUnit, CTemplate, Boost and Zlib are provided with HemeLB sources and can be build during the HemeLB build.
 
