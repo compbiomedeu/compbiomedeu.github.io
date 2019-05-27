@@ -10,7 +10,7 @@ layout: plain
 ## Description
 ---
 
-**License :** GNU GPL v3.0
+**License :** LGPL v3.0
 
 **Target system :**  HPC platforms
 
@@ -97,20 +97,20 @@ make
 ```
 
 3 - Build HemeLB using downloaded dependencies
-2.1 - Enter the HemeLB source directory ($HEMELBROOT/src) and create build and install directories
+3.1 - Enter the HemeLB source directory ($HEMELBROOT/src) and create build and install directories
 ```bash
 cd ../../src/
 mkdir build
 mkdir install
 ```
 
-2.3 - Configure using CMake
+3.3 - Configure using CMake
 ```bash
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-2.4 - Build HemeLB and install in the 'install' directory we created ($HEMELBROOT/src/install)
+3.4 - Build HemeLB and install in the 'install' directory we created ($HEMELBROOT/src/install)
 ```bash
 make
 ```
