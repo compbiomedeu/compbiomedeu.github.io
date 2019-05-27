@@ -17,7 +17,7 @@ The Palabos library is a framework for general-purpose computational fluid dynam
 
 **Target users :** Scientists and engineers with a solid background in computational fluid dynamics, and potentially some knowledge in LB modeling
 
-**Type of parallelism :** ???
+**Type of parallelism :** MPI, ???
 
 **Scalability :**	
 : Typical run: XXX – XXX cores
@@ -63,61 +63,58 @@ export PALABOSROOT=$PWD
 2 - compile
 
 2.1 - simple unoptimized build with foss toolchain
+```bash
 cd $PALABOSROOT/examples/showCases/cylinder2d
-module load foss/2018b
 make -j4
+```
 
 2.2 - optimized build with foss toolchain
+```bash
 cd $PALABOSROOT/examples/showCases/cylinder2d
 module load foss/2018b
 make palabosRoot=$PALABOSROOT optimFlags='-O3 -march=sandybridge' debug='false' 'SMPparallel=true' 'serialCXX=g++' 'parallelCXX=mpic++' -j4
+```
 
 2.3 - optimized build with intel toolchain
+```bash
+module load foss/2018b
 cd $PALABOSROOT/examples/showCases/cylinder2d
 module load intel/2018b
 make palabosRoot=$PALABOSROOT optimFlags='-O3 -xAVX -axCORE-AVX2' debug='false' 'SMPparallel=true' 'serialCXX=icpc' 'parallelCXX=mpiicpc' -j4
-
+```
 
 This creates dir '$PALABOSROOT/lib' containing library 'libplb_mpi.a'.
-
-
-
-
-The library Palabos makes use of an on-demand compilation process. The code is compiled the first time it is used by an end-user application, and then automatically re-used in future, until a new compilation is needed due to a modification of the code or compilation options. To see how this works, change into the directory of one of the example programs, such as $(PALABOS)/examples/showCases/cylinder2D/. Type make to compile both the Palabos library and the example program under standard conditions with the GCC compiler, and execute the program with the command ./cavity2D. The program simulates the 2D flow around a cylinder; if the software ImageMagick is installed on your system, the program saves GIF images in the tmp/ subdirectory, representing the velocity field at selected time steps.
-
-
-
-
-
 
 ---
 ## Running Palabos
 ---
 
-Compilation of an example (no need to recompile the whole lib)
+1 - Compilation of the 'cavity2d' example
+The no need to recompile the whole lib)
 
-1 - With foss toolchain
+1.1 - With foss toolchain
+```bash
 module load foss/2018b
 cd $PALABOSROOT/examples/showCases/cavity2d
 mpicxx -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations -O3 -march=sandybridge -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX -I$PALABOSROOT/src -I$PALABOSROOT/externalLibraries -o cavity2d cavity2d.cpp -L$PALABOSROOT/lib/ -lplb_mpi
+```
 
-make palabosRoot=$PALABOSROOT optimFlags='-O3 -march=sandybridge' debug='false' 'SMPparallel=true' 'serialCXX=g++' 'parallelCXX=mpic++'
-
-cd $PALABOSROOT/examples/showCases/boussinesqThermal2d
-mpicxx -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations -O3 -march=sandybridge -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX -I$PALABOSROOT/src -I$PALABOSROOT/externalLibraries -o rayleighBenard2D rayleighBenard2D.cpp -L$PALABOSROOT/lib/ -lplb_mpi
-
-
-2 - intel
+1.2 - With intel toolchain
+```bash
 module load intel/2018b
 cd $PALABOSROOT/examples/showCases/cavity2d
 mpiicpc -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations -O3 -xAVX -axCORE-AVX2 -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX -I$PALABOSROOT/src -I$PALABOSROOT/externalLibraries -o cavity2d cavity2d.cpp -L$PALABOSROOT/lib/ -lplb_mpi
+```
 
-cd $PALABOSROOT/examples/showCases/boussinesqThermal2d
-mpiicpc -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations -O3 -xAVX -axCORE-AVX2 -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX -I$PALABOSROOT/src -I$PALABOSROOT/externalLibraries -o rayleighBenard2D rayleighBenard2D.cpp -L$PALABOSROOT/lib/ -lplb_mpi
+2 - Running the 'cavity2d' example
+```bash
+srun -n 24 ./cavity2d
+```
 
 ### Input Preparation
 
 #### Use case: XXXX
+look at the examples (http://www.palabos.org/documentation/userguide/appendix-samples.html#appendix-example-programs)
 
 #### Input files
 
