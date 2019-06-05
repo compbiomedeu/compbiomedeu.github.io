@@ -90,7 +90,7 @@ This creates dir '$PALABOSROOT/lib' containing library 'libplb_mpi.a'.
 ---
 
 1 - Compilation of the 'cavity2d' example
-The no need to recompile the whole lib)
+There is no need to recompile the whole lib
 
 1.1 - With foss toolchain
 ```bash
