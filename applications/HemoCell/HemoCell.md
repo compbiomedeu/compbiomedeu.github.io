@@ -105,7 +105,7 @@ so the install_prefix is not used and there is no way to put the libs in another
 
 
 => I did a small change in CMakeLists.txt, now the user can pass -DCMAKE_BUILD_TYPE=<Release or Debug> and -DCMAKE_MARCH=<arch> to cmake. A 'Release' build with use the march and optim flags, a 'Debug" build will use '-O0 -ggdb'. The default march is '-march=native', but a different march can be passed to cmake.
-This change is is 'optim_flags_gcc.patch'.
+This change is is 'optim_cmake_flags_lib.patch'.
 
 
 
@@ -153,7 +153,7 @@ make
 
 
 
-#### Use case: cellCollision_interior_viscosity - with foss toolchain
+#### Use case: oneCellShear - with foss toolchain
 
 1 - init environment
 ```bash
@@ -170,22 +170,25 @@ cd $HEMOCELLROOT/examples/
 patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
 make cmakefiles   #replace <case>/CmakeLists.txt with ./CmakeLists_template.txt to update the build process for all cases.
 ```
-
+ 
 
 3 - compile
 3.1 - compile a single examples with custom options
 ```bash
 cd $HEMOCELLROOT/examples/oneCellShear
+mkdir build
+cd build
 #cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install -DCMAKE_CXX_FLAGS='-O3 -march=sandybridge'  -DENABLE_MPI=1 -DENABLE_PARMETIS=1
-cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-march=sandybridge'
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-march=sandybridge'
 make
+cd ..
 ```
 WARNING: this rebuilds 'libhemocell.a'..
 To avoid that, manual compilation and linking of the example is possible:
 ```bash
 mpicxx  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o oneCellShear.o -c oneCellShear.cpp
 
-mpicxx -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic oneCellShear.o -o oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+mpicxx -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic oneCellShear.o -o ../oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
 ```
 
 3.2 - compile all examples with default options
@@ -200,6 +203,31 @@ WARNING: this rebuilds 'libhemocell.a'...
 cd $HEMOCELLROOT/examples/oneCellShear
 srun -n 4 oneCellShear config.xml
 ```
+The results will be written in a 'tmp' directory, containing 3 subdirectories: 'csv', 'hdf5' and 'log'.
+
+5 - Post processing of the results of example oneCellShear
+When the jobs is completed, use 'batchPostProcess.sh' to create XDMF files ('.xmf. extension - http://www.xdmf.org/index.php/Main_Page). XDMF is an XML language that allows one to describe complex objects from a set of datasets (e.g. in HDF5 format), so that the results can be visualized with Paraview (or another visualization tool).
+The 'batchPostProcess.sh' script should be run within the $HEMOCELLROOT/examples/<case> or $HEMOCELLROOT/examples/<case>/tmp directory.
+```bash
+$HEMOCELLROOT/scripts/batchPostProcess.sh
+```
+The XDMF files are written in the tmp directory.
+WARNING: what happens when we have multiple 'tmp' directories ? It creates XDMF files in all tmp_* directories.
+
+6 - Visualization of the results of example oneCellShear
+Visualization is usually not done directly on the supercomputer but rather on local machines when possible.
+To copy files back to a local machine, one can use for example 'scp' on a linux machine.
+From the local machine, open a terminal and run the following command (replacing '<login>' with your actual login on Cartesius, and '/path/to/hemocell/rootdir' with the path to your hemocell root directory on Cartesius).
+```bash
+scp -r <login>@cartesius.surfsara.nl:/home/login/path/to/hemocell/rootdir/examples/oneCellShear/tmp .
+```
+This copies the output directory 'tmp' and all its content to the local machine.
+Now to visualize the results, one can use Paraview.
+```bash
+cd tmp
+paraview &
+```
+Then open the XDMF files, and visualize the results of the simulation with Paraview.
 
 
 #### Input files
@@ -207,6 +235,8 @@ srun -n 4 oneCellShear config.xml
 ### Runtime Information
 
 #### Post processiong
+
+
 see https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source and https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh.
 
 
