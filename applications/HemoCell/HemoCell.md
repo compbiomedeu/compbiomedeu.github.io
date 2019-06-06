@@ -109,7 +109,7 @@ This change is is 'optim_cmake_flags_lib.patch'.
 
 
 
-3 - Compile with intel toolchain -> not supported
+3 - Compile with intel toolchain
 
 3.1 - Load dependencies
 ```bash
@@ -142,8 +142,6 @@ mkdir ../../install
 cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install  -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DMARCH='-xAVX -axCORE-AVX2' -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc
 make
 ```
--> make fails
--> pb because I pass -march
 
 ---
 ## Running HemoCell
@@ -233,7 +231,7 @@ cd $TEMPDIR
 # run simulation
 srun -n 4 $HEMOCELLROOT/examples/oneCellShear/oneCellShear config.xml
 
-# copy results ack to the home directory
+# copy results back to the home directory
 cp -r tmp/  $HEMOCELLROOT/examples/oneCellShear/tmp_$SLURM_JOB_ID
 ```
 
@@ -262,6 +260,86 @@ cd tmp
 paraview &
 ```
 Then open the XDMF files, and visualize the results of the simulation with Paraview.
+
+
+
+
+
+#### Use case: cellCollision_interior_viscosity - with intel toolchain
+
+1 - init environment
+```bash
+module load intel/2018b
+module load CMake/3.11.4-GCCcore-7.3.0
+module load HDF5/1.10.2-intel-2018b
+module load ParMETIS/4.0.3-intel-2018b
+module load h5py/2.8.0-intel-2018b-Python-2.7.15
+```
+
+2 - patch CMakeLists.txt
+```bash
+cd $HEMOCELLROOT/examples/
+patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
+make cmakefiles   #replace <case>/CmakeLists.txt with ./CmakeLists_template.txt to update the build process for all cases.
+```
+ 
+
+3 - compile
+3.1 - compile a single examples with custom options
+```bash
+cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-xAVX -axCORE-AVX2' -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc
+make
+cd ..
+```
+WARNING: this rebuilds 'libhemocell.a'..
+
+To avoid that, manual compilation and linking of the example is possible:
+```bash
+mpiicpc  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o cellCollision_interior_viscosity.o -c cellCollision_interior_viscosity.cpp
+
+mpicxx -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic cellCollision_interior_viscosity.o -o ../cellCollision_interior_viscosity $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+```
+
+3.2 -
+
+4 - run
+
+4.1 - in a batch job on Cartesius
+```bash
+#!/bin/bash
+#SBATCH -J hemocell_cellCollision_interior_viscosity
+#SBATCH -n 24
+#SBATCH -p normal
+#SBATCH -o hemocell_cellCollision_interior_viscosity_%j.out
+#SBATCH -t 00:10:00
+
+export HEMOCELLROOT=$HOME/CompBioMed/hemocell/hemocell-2.0_intel/
+
+# load modules
+module purge
+module load surfsara
+module load intel/2018b
+module load HDF5/1.10.2-intel-2018b
+module load ParMETIS/4.0.3-intel-2018b
+module load h5py/2.8.0-intel-2018b-Python-2.7.15
+
+# copy input files to scratch-shared
+export TEMPDIR=`mktemp -d -p /scratch-shared`
+cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
+cp cellCollision_interior_viscosity *.xml *.pos $TEMPDIR
+cd $TEMPDIR
+
+# run simulation
+srun -n 4 $HEMOCELLROOT/examples/cellCollision_interior_viscosity/cellCollision_interior_viscosity config.xml
+
+# copy results back to the home directory
+cp -r tmp/  $HEMOCELLROOT/examples/cellCollision_interior_viscosity/tmp_$SLURM_JOB_ID
+```
+
+-> fails with "(HemoCell) (AddCellType) (RBC_HO) Cannot enable interior viscosity when INTERIOR_VISCOSITY is not defined at compile time"
 
 
 #### Input files
