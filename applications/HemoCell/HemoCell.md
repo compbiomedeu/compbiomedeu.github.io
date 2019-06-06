@@ -199,10 +199,44 @@ make executables
 WARNING: this rebuilds 'libhemocell.a'...
 
 4 - run example oneCellShear
+4.1 - interactively
 ```bash
 cd $HEMOCELLROOT/examples/oneCellShear
 srun -n 4 oneCellShear config.xml
 ```
+4.2 - in a batch job
+Here is an example of a submission script for Cartesius
+```bash
+#!/bin/bash
+#SBATCH -J hemocell_oneCellShear
+#SBATCH -n 24
+#SBATCH -p normal
+#SBATCH -o hemocell_oneCellShear_%j.out
+#SBATCH -t 00:10:00
+
+export HEMOCELLROOT=$HOME/CompBioMed/hemocell/hemocell-2.0_foss/
+
+# load modules
+module purge
+module load surfsara
+module load foss/2018b
+module load HDF5/1.10.2-foss-2018b
+module load ParMETIS/4.0.3-foss-2018b
+module load h5py/2.8.0-foss-2018b-Python-2.7.15
+
+# copy input files to scratch-shared
+export TEMPDIR=`mktemp -d -p /scratch-shared`
+cd $HEMOCELLROOT/examples/oneCellShear
+cp oneCellShear *.xml *.pos *.gpl $TEMPDIR
+cd $TEMPDIR
+
+# run simulation
+srun -n 4 $HEMOCELLROOT/examples/oneCellShear/oneCellShear config.xml
+
+# copy results ack to the home directory
+cp -r tmp/  $HEMOCELLROOT/examples/oneCellShear/tmp_$SLURM_JOB_ID
+```
+
 The results will be written in a 'tmp' directory, containing 3 subdirectories: 'csv', 'hdf5' and 'log'.
 
 5 - Post processing of the results of example oneCellShear
