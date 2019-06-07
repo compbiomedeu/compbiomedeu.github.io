@@ -116,9 +116,55 @@ make
 ```
 Then the 'hemelb' executable is located in '$HEMELBROOT/src/install/bin'
 
+
+### Installation steps using existing modules for the dependencies
+```bash
+module purge
+module load surfsara
+module load foss/2018b    # or intel/2018b
+module load CMake/3.11.4-GCCcore-7.3.0
+module load ParMETIS/4.0.3-foss-2018b Boost/1.67.0-foss-2018b    # or ParMETIS/4.0.3-intel-2018b Boost/1.67.0-intel-2018b
+
+cmake -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include ..
+# TinyXML, CPPUnit, Ctemplate will be downloaded and built from source
+# does it find the "right" zlib (i.e. not system zlib) ? ZLIB_LIBRARY_RELEASE ZLIB_LIBRARY_DEBUG
+make
+make install
+```
+
+WARNING: the unittests do not work.
+       With '-DHEMELB_BUILD_TESTS_UNIT=ON'
+        we get error such as 
+          /home/maximem/CompBioMed/hemelb_google_drive/hemelb-pure-vphys/src/unittests/geometry/NeedsTests.h:221:10: error: ‘tr1’ in namespace ‘std’ does not name a type
+          std::tr1::unordered_set<site_t> inputNeededBlocks;
+        this is due to the use of 'std::tr1' in the tests, which was an extension to the C++03. It was included in C++11, which is used for HemeLB. tr1 is now deprecated (is it?). Does it come from GoogleTest ? (cf. https://github.com/Microsoft/TestAdapterForGoogleTest/issues/119)
+
+        
+
+### Optimized compilation
+# for foss:
+```bash
+cmake -DHEMELB_OPTIMISATION='-O3 -march=sandybridge' -DHEMELB_USE_SSE3=OFF -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include ..
+```
+
+# for intel:
+```bash
+cmake  -DHEMELB_OPTIMISATION='-O3 -xAVX -axCORE-AVX2' -DHEMELB_USE_SSE3=OFF -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc ..
+```
+
 ---
 ## Running HemeLB
 ---
+# unittests
+```bash
+cd $HEMELBROOT/src/unittests
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DHEMELB_DEPENDENCIES_PATH=$HEMELBROOT/dep/ -DHEMELB_DEPENDENCIES_INSTALL_PATH=$HEMELBROOT/dep/install ..
+```
+
+
+
 
 ### Input Preparation
 

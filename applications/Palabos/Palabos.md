@@ -65,6 +65,7 @@ export PALABOSROOT=$PWD
 2.1 - simple unoptimized build with foss toolchain
 ```bash
 cd $PALABOSROOT/examples/showCases/cylinder2d
+module load foss/2018b
 make -j4
 ```
 

@@ -104,7 +104,7 @@ make: *** No rule to make target `install'.  Stop."
 so the install_prefix is not used and there is no way to put the libs in another directory
 
 
-=> I did a small change in CMakeLists.txt, now the user can pass -DCMAKE_BUILD_TYPE=<Release or Debug> and -DCMAKE_MARCH=<arch> to cmake. A 'Release' build with use the march and optim flags, a 'Debug" build will use '-O0 -ggdb'. The default march is '-march=native', but a different march can be passed to cmake.
+=> I did a small change in CMakeLists.txt, now the user can pass -DCMAKE_BUILD_TYPE=<Release or Debug> and -DMARCH=<arch> to cmake. A 'Release' build will use the march and optim flags, a 'Debug" build will use '-O0 -ggdb'. The default march is '-march=native', but a different march can be passed to cmake.
 This change is is 'optim_cmake_flags_lib.patch'.
 
 
@@ -235,7 +235,7 @@ srun -n 4 $HEMOCELLROOT/examples/oneCellShear/oneCellShear config.xml
 cp -r tmp/  $HEMOCELLROOT/examples/oneCellShear/tmp_$SLURM_JOB_ID
 ```
 
-The results will be written in a 'tmp' directory, containing 3 subdirectories: 'csv', 'hdf5' and 'log'.
+The output of a case is usually written to the <case>/tmp folder. The checkpoints are the .xml and .dat files. When a new checkpoint is created they are moved to .xml.old and ``.dat.old. The hdf5 output is stored per timestep in tmp/hdf5 and the csv output in tmp/csv.
 
 5 - Post processing of the results of example oneCellShear
 When the jobs is completed, use 'batchPostProcess.sh' to create XDMF files ('.xmf. extension - http://www.xdmf.org/index.php/Main_Page). XDMF is an XML language that allows one to describe complex objects from a set of datasets (e.g. in HDF5 format), so that the results can be visualized with Paraview (or another visualization tool).
@@ -340,7 +340,7 @@ cp -r tmp/  $HEMOCELLROOT/examples/cellCollision_interior_viscosity/tmp_$SLURM_J
 ```
 
 -> fails with "(HemoCell) (AddCellType) (RBC_HO) Cannot enable interior viscosity when INTERIOR_VISCOSITY is not defined at compile time"
-
+(idem with foss)
 
 #### Input files
 
@@ -367,6 +367,8 @@ This script merges the CSV output from multiple processors into a single one in 
 cd hemocell/examples/<case>/tmp/
 . ./scripts/CellInfoMergeCSV.sh
 
+
+#### HemoCell with singularity
 
 
 ---
