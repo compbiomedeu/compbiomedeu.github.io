@@ -93,7 +93,7 @@ module load intel/2018b
 make -j4
 ```
 
-3 - optimized build with intel toolchain
+3 - optimized build (recommended)
 ```bash
 cd $PALABOSROOT/examples/showCases/cylinder2d
 module load intel/2018b
@@ -132,15 +132,41 @@ srun -n 24 ./cavity2d
 
 3 - Running the 'cavity2d' example in a batch job (recommended)
 Example of a working job script to be submitted with the `sbatch` command.
+
 ```bash
-#SBATCH ..........
-srun -n 24 ./cavity2d
+#!/bin/bash
+#SBATCH -J palabos_cavity2d
+#SBATCH -n 24
+#SBATCH -p normal
+#SBATCH -o palabos_cavity2d_%j.out
+#SBATCH -t 00:10:00
+
+export PALABOSROOT=$HOME/CompBioMed/palabos/palabos-v2.0r0
+
+# load modules
+module purge
+module load surfsara
+module load foss/2018b  # or module load intel/2018b
+
+# copy input files to scratch-shared
+export TEMPDIR=`mktemp -d -p /scratch-shared`
+cd $PALABOSROOT/examples/showCases/cavity2d
+cd $TEMPDIR
+mkdir tmp
+
+# run simulation
+srun -n 24 $PALABOSROOT/examples/showCases/cavity2d/cavity2d
+
+# copy results back to the home directory
+cp -r tmp/  $PALABOSROOT/examples/showCases/cavity2d/tmp_$SLURM_JOB_ID
 ```
+
+The output can then be found in directory `$PALABOSROOT/examples/showCases/cavity2d/tmp_$SLURM_JOB_ID`.
 
 For more information about the examples included in the tar-ball please refer to http://www.palabos.org/documentation/userguide/appendix-samples.html#appendix-example-programs.
 
 
-### Benchmark and scalability of Palabos
+### Benchmarking and scalability of Palabos
 
 
 
