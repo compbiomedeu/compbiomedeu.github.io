@@ -142,12 +142,12 @@ WARNING: the unittests do not work.
 
 
 ### Optimized compilation
-# for foss:
+#### for foss:
 ```bash
 cmake -DHEMELB_OPTIMISATION='-O3 -march=sandybridge' -DHEMELB_USE_SSE3=OFF -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include ..
 ```
 
-# for intel:
+#### for intel:
 ```bash
 cmake  -DHEMELB_OPTIMISATION='-O3 -xAVX -axCORE-AVX2' -DHEMELB_USE_SSE3=OFF -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc ..
 ```
@@ -171,6 +171,18 @@ cmake -DCMAKE_BUILD_TYPE=Release -DHEMELB_DEPENDENCIES_PATH=$HEMELBROOT/dep/ -DH
 
 ### Runtime Information
 
+
+---
+### Benchmarking and scalability of HemeLB on Cartesius
+---
+
+TODO
+
+---
+### Guidelines for efficient parallel programs using HemeLB
+---
+
+TODO
 
 ---
 
