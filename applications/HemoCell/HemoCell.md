@@ -232,13 +232,8 @@ make executables
 ```
 WARNING: this rebuilds/relinks `libhemocell.a`..
 
-6 - Run example oneCellShear on Cartesius
-6.1 - interactively (not recommended)
-```bash
-cd $HEMOCELLROOT/examples/oneCellShear
-srun -n 4 oneCellShear config.xml
-```
-6.2 - in a batch job (recommended)
+6 - Run example oneCellShear on Cartesius in a batch job (recommended)
+
 Here is an example of a submission script for Cartesius:
 ```bash
 #!/bin/bash
@@ -274,6 +269,7 @@ cp -r tmp/  $HEMOCELLROOT/examples/oneCellShear/tmp_$SLURM_JOB_ID
 The output of a case is usually written to the <case>/tmp folder. The checkpoints are the .xml and .dat files. When a new checkpoint is created they are moved to .xml.old and ``.dat.old. The hdf5 output is stored per timestep in tmp/hdf5 and the csv output in tmp/csv.
 
 7 - Post processing of the results of example oneCellShear
+
 When the jobs is completed, use 'batchPostProcess.sh' to create XDMF files ('.xmf. extension - http://www.xdmf.org/index.php/Main_Page). XDMF is an XML language that allows one to describe complex objects from a set of datasets (e.g. in HDF5 format), so that the results can be visualized with Paraview (or another visualization tool).
 The 'batchPostProcess.sh' script should be run within the $HEMOCELLROOT/examples/<case> or $HEMOCELLROOT/examples/<case>/tmp directory.
 ```bash
@@ -283,6 +279,7 @@ The XDMF files are written in the tmp directory.
 WARNING: what happens when we have multiple 'tmp' directories ? It creates XDMF files in all tmp_* directories.
 
 8 - Visualization of the results of example oneCellShear
+
 Visualization is usually not done directly on the supercomputer but rather on local machines when possible.
 To copy files back to a local machine, one can use for example 'scp' on a linux machine.
 From the local machine, open a terminal and run the following command (replacing '<login>' with your actual login on Cartesius, and '/path/to/hemocell/rootdir' with the path to your hemocell root directory on Cartesius).
@@ -301,6 +298,7 @@ Then open the XDMF files, and visualize the results of the simulation with Parav
 ### Simple use case with intel toolchain: cellCollision_interior_viscosity - with intel toolchain
 
 1 - init environment
+
 ```bash
 module load intel/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
@@ -310,6 +308,7 @@ module load h5py/2.8.0-intel-2018b-Python-2.7.15
 ```
 
 2 - Patch CMakeLists_template.txt
+
 ```bash
 cd $HEMOCELLROOT/examples/
 patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
@@ -317,12 +316,14 @@ patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
 This is the same patch as above.
 
 3 - Update CMakeLists.txt for all testcases
+
 ```bash
 make cmakefiles
 ```
 This replaces all <case>/CmakeLists.txt with ./CmakeLists_template.txt to update the build process for all cases.
 
 4 - Compile a single example with optimization flags
+
 ```bash
 cd $HEMOCELLROOT/examples/oneCellShear
 mkdir build
@@ -340,19 +341,15 @@ mpicxx -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-depreca
 ```
 
 5 - Compile all examples with default options (not recommended)
+
 ```bash
 cd $HEMOCELLROOT/examples
 make executables
 ```
 WARNING: this rebuilds/relinks `libhemocell.a`..
 
-6 - Run example cellCollision_interior_viscosity on Cartesius
-6.1 - interactively (not recommended)
-```bash
-cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
-srun -n 4 cellCollision_interior_viscosity config.xml
-```
-6.2 - in a batch job (recommended)
+6 - Run example cellCollision_interior_viscosity on Cartesius in a batch job
+
 Here is an example of a submission script for Cartesius:
 ```bash
 #!/bin/bash
@@ -426,6 +423,7 @@ TODO
 ---
 
 TODO
+
 
 ---
 
