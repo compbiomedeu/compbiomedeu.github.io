@@ -155,7 +155,7 @@ cmake  -DHEMELB_OPTIMISATION='-O3 -xAVX -axCORE-AVX2' -DHEMELB_USE_SSE3=OFF -DCM
 ---
 ## Running HemeLB on Cartesius
 ---
-# unittests
+#### unittests
 ```bash
 cd $HEMELBROOT/src/unittests
 mkdir build
