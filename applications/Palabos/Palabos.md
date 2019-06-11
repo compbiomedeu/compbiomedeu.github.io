@@ -4,7 +4,7 @@ layout: plain
 
 # [INCOMPLETE PAGE - WORK IN PROGRESS] Palabos - CompBioMed User Guide
 
-**Provider :** [The Palabos Project ](http://www.palabos.org/index.php)
+**Provider :** [The Palabos Project](http://www.palabos.org/index.php)
 
 ---
 ## Description
@@ -25,7 +25,7 @@ The Palabos library is a framework for general-purpose computational fluid dynam
 
 **System where it runs :** Cartesius, ???
 
-**Extra :** HemeLB is part of the [2020 Science programme](http://www.2020science.net/software/hemelb.html)
+**Extra :** 
 
 ---
 ## Download and installation
@@ -44,9 +44,11 @@ It has practically no external dependencies (only Posix and MPI).
 
 ### Prerequisites
 
-The library is exempt from external dependencies: all you need is a working compiler environment, including a modern C++ compiler (GCC, the Intel compiler and the Portland Group compiler have been succesfully tested), and a reasonably recent version of the Python interpreter (Python 2.7.15 is used with Palabos on Cartesius).
+- a modern C++ compiler (GCC, the Intel compiler and the Portland Group compiler have been succesfully tested - GCC 7.3.0-2.30 and icc 2018.3.222 have been successfully used on Cartesius)
+- a modern MPI implementation (OpenMPI 3.1.1 and impi 2018.3.222 have been successfully used on Cartesius)
+- a reasonably recent version of the Python interpreter (Python 2.7.15 is used with Palabos on Cartesius).
 
-Palabos makes use of a few other open-source libraries. They don’t need to be explicitly intalled, though, because they are part of the Palabos releases:
+Palabos makes use of two open-source libraries. They don’t need to be explicitly intalled, though, because they are part of the Palabos releases:
 - [SConstruct](https://scons.org/) (Only tested with Linux): This Python-based library is used in Palabos to manage the compilation process.
 - [TinyXML](https://sourceforge.net/projects/tinyxml/): This library is used to read structured user input in XML format.
 
@@ -125,12 +127,7 @@ cd $PALABOSROOT/examples/showCases/cavity2d
 mpiicpc -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations -O3 -xAVX -axCORE-AVX2 -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX -I$PALABOSROOT/src -I$PALABOSROOT/externalLibraries -o cavity2d cavity2d.cpp -L$PALABOSROOT/lib/ -lplb_mpi
 ```
 
-2 - Running the 'cavity2d' example interactively on (not recommended)
-```bash
-srun -n 24 ./cavity2d
-```
-
-3 - Running the 'cavity2d' example in a batch job (recommended)
+2 - Running the 'cavity2d' example in a batch job
 Example of a working job script to be submitted with the `sbatch` command.
 
 ```bash
@@ -165,12 +162,15 @@ The output can then be found in directory `$PALABOSROOT/examples/showCases/cavit
 
 For more information about the examples included in the tar-ball please refer to http://www.palabos.org/documentation/userguide/appendix-samples.html#appendix-example-programs.
 
+---
+### Benchmarking and scalability of Palabos on Cartesius
+---
 
-### Benchmarking and scalability of Palabos
+TODO
 
-
-
+---
 ### Guidelines for efficient parallel programs using Palabos
+---
 
 Refer to http://www.palabos.org/documentation/userguide/parallelism.html#parallel-programming-approach.
 

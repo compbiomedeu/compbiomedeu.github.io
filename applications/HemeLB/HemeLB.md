@@ -32,12 +32,12 @@ layout: plain
 
 ### Access mode:
 
-Source code available from https://github.com/UCL/hemelb or 
+The source code is available from https://github.com/UCL/hemelb or 
 https://drive.google.com/file/d/1khFF8vYL6vSS_f_IG1cJ9iO5K7bLCW7M/view?usp=sharing.
 
 HemeLB source code is available for free under the conditions of [LGPL-3.0 license](https://www.gnu.org/licenses/lgpl-3.0.html).
 
-HemeLB is written in C++. HemeLB uses professional software engineering techniques to achieve robustness:
+HemeLB is written in C++ and uses professional software engineering techniques to achieve robustness:
 - Test-driven design
 - Agile project management
 - Ticketing (Trac) and continuous integration (Jenkins)
@@ -47,23 +47,24 @@ HemeLB is written in C++. HemeLB uses professional software engineering techniqu
 ### Prerequisites
 
 To compile an installation of HemeLB capable to run the provided example, the following software is required:
-- C and C++ compilers (Intel/GNU)
-- MPI
+- C and C++ compilers (Intel, GNU)
+- a modern MPI implementation (e.g. Intel, OpenMPI)
 - CMake
 - Zlib
-- Boost
+- [Boost](https://www.boost.org/)
 - [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) 
-- ParMETIS
-- TinyXML
-- CPPUnit
-- CTemplate
+- [ParMETIS](http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview)
+- [TinyXML](https://sourceforge.net/projects/tinyxml/)
+- [CPPUnit](https://sourceforge.net/projects/cppunit/)
+- [CTemplate](http://goog-ctemplate.sourceforge.net/)
 
 TinyXML, ParMETIS, CPPUnit, CTemplate, Boost and Zlib are provided with HemeLB sources and can be build during the HemeLB build.
 
 
-### Installation steps using included dependencies
+### Unoptimized installation steps using included dependencies on Cartesius (not recommended)
 
-1 - Download from https://drive.google.com/file/d/1khFF8vYL6vSS_f_IG1cJ9iO5K7bLCW7M/view?usp=sharing
+1 - Download source code
+First download archive from Google Drive: https://drive.google.com/file/d/1khFF8vYL6vSS_f_IG1cJ9iO5K7bLCW7M/view?usp=sharing, and copy it to Cartesius.
 ```bash
 tar xvzf hemelb-pure-vphys.tar.gz
 cd hemelb-pure-vphys/
@@ -117,7 +118,7 @@ make
 Then the 'hemelb' executable is located in '$HEMELBROOT/src/install/bin'
 
 
-### Installation steps using existing modules for the dependencies
+### Optimized installation steps using existing modules for the dependencies (recommended)
 ```bash
 module purge
 module load surfsara
@@ -139,7 +140,6 @@ WARNING: the unittests do not work.
           std::tr1::unordered_set<site_t> inputNeededBlocks;
         this is due to the use of 'std::tr1' in the tests, which was an extension to the C++03. It was included in C++11, which is used for HemeLB. tr1 is now deprecated (is it?). Does it come from GoogleTest ? (cf. https://github.com/Microsoft/TestAdapterForGoogleTest/issues/119)
 
-        
 
 ### Optimized compilation
 # for foss:
@@ -153,7 +153,7 @@ cmake  -DHEMELB_OPTIMISATION='-O3 -xAVX -axCORE-AVX2' -DHEMELB_USE_SSE3=OFF -DCM
 ```
 
 ---
-## Running HemeLB
+## Running HemeLB on Cartesius
 ---
 # unittests
 ```bash
@@ -162,9 +162,6 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DHEMELB_DEPENDENCIES_PATH=$HEMELBROOT/dep/ -DHEMELB_DEPENDENCIES_INSTALL_PATH=$HEMELBROOT/dep/install ..
 ```
-
-
-
 
 ### Input Preparation
 
