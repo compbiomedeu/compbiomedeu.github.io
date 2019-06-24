@@ -408,13 +408,13 @@ cd hemocell/examples/<case>/tmp/
 . ./scripts/CellInfoMergeCSV.sh
 
 ---
-### Benchmarking and scalability of Palabos on Cartesius
+### Benchmarking and scalability of HemoCell on Cartesius
 ---
 
 TODO
 
 ---
-### Guidelines for efficient parallel programs using Palabos
+### Guidelines for efficient parallel programs using HemoCell
 ---
 
 TODO
