@@ -17,7 +17,7 @@ The Palabos library is a framework for general-purpose computational fluid dynam
 
 **Target users :** Scientists and engineers with a solid background in computational fluid dynamics, and potentially some knowledge in LB modeling
 
-**Type of parallelism :** MPI, shared memory (OpenMP ?) ?, hybrid MPI+OpenMP ?
+**Type of parallelism :** MPI
 
 **Scalability :**	
 : Typical run: XXX – XXX cores

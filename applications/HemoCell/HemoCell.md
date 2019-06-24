@@ -10,6 +10,7 @@ layout: plain
 ## Description
 ---
 HemoCell is a framework for simulating dense suspensions of deformable cells, focusing on blood. It is based on the combined Immersed boundary-lattice Boltzmann method (IB-LBM) and is built on top of the open source C++ lattice Boltzmann solver Palabos.
+HemoCell is able to simulate blood flow at high shear rates (>1000 s<sup>-1</sup>) and with a high number of cells (>1000 cells).
 
 **License :** AGPL v3.0
 
@@ -21,7 +22,7 @@ HemoCell is a framework for simulating dense suspensions of deformable cells, fo
 
 **Scalability :**	
 : Typical run: XXX – XXX cores
-: Large run: XXXX – 1,000s cores
+: Large run: XXXX – 4,096 cores
 
 **System where it runs :**  Cartesius, ???. The code can be compiled on Linux, Mac OS X and Windows 10 using the linux subsystem extension.
 

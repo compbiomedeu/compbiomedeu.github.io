@@ -16,13 +16,13 @@ layout: plain
 
 **Target users :** Interventional radiologists, ???
 
-**Type of parallelism :** ???
+**Type of parallelism :** MPI
 
 **Scalability :**	
 : Typical run: XXX – XXX cores
-: Large run: XXXX – XXXX cores
+: Large run: XXXX – 300,000 cores
 
-**System where it runs :** Cartesius, ???
+**System where it runs :** Cartesius, ARCHER, Blue Waters
 
 **Extra :** HemeLB is part of the [2020 Science programme](http://www.2020science.net/software/hemelb.html)
 
