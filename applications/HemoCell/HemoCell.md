@@ -123,7 +123,6 @@ module load h5py/2.8.0-foss-2018b-Python-2.7.15
 ```bash
 cd $HEMOCELLROOT/build/hemocell
 mkdir ../../install
-#cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install -DCMAKE_CXX_FLAGS='-O3 -march=sandybridge'  -DENABLE_MPI=1 -DENABLE_PARMETIS=1
 cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install  -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DMARCH='-march=sandybridge'
 make
 ```
@@ -217,13 +216,17 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-march=sandybridge'
 make
 cd ..
 ```
-WARNING: this rebuilds/relinks `libhemocell.a`..
+WARNING: this rebuilds/relinks `libhemocell.a`.
+
 To avoid that, manual compilation and linking of the example is possible:
 ```bash
+mkdir build
+cd build
 #compilation
-mpicxx  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o oneCellShear.o -c oneCellShear.cpp
+mpicxx  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o oneCellShear.o -c ../oneCellShear.cpp
 #linking
 mpicxx -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic oneCellShear.o -o ../oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+cd ..
 ```
 
 5 - Compile all examples with default options (not recommended)
@@ -326,19 +329,23 @@ This replaces all <case>/CmakeLists.txt with ./CmakeLists_template.txt to update
 4 - Compile a single example with optimization flags
 
 ```bash
-cd $HEMOCELLROOT/examples/oneCellShear
+cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
 mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-xAVX -axCORE-AVX2' -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc
 make
 cd ..
 ```
-WARNING: this rebuilds/relinks `libhemocell.a`..
+WARNING: this rebuilds/relinks `libhemocell.a`.
+
 To avoid that, manual compilation and linking of the example is possible:
 ```bash
+mkdir build
+cd build
 mpiicpc  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o cellCollision_interior_viscosity.o -c cellCollision_interior_viscosity.cpp
 
-mpicxx -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic cellCollision_interior_viscosity.o -o ../cellCollision_interior_viscosity $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+mpiicpc -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic cellCollision_interior_viscosity.o -o ../cellCollision_interior_viscosity $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+cd ..
 ```
 
 5 - Compile all examples with default options (not recommended)
