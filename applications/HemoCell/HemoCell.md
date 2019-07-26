@@ -550,6 +550,7 @@ We observed significantly better performances when using the foss toolchain (mor
 So we recommend to use the foss toolchain if possible to get the best performances with HemoCell.
 
 You can check that your installation of HemoCell has the expected performances by running the 'hematocrit_33' example on 3 nodes / 64 cores on Cartesius or Archer and comparing with the following running time:
+```
 | system    | number of nodes / cores | toolchain | running time (s.) |
 |-----------|-------------------------|-----------|-------------------|
 | cartesius | 16/1                    | foss      | 1276.1            |
@@ -560,6 +561,7 @@ You can check that your installation of HemoCell has the expected performances b
 | archer    | 64/3                    | foss      | 471.9             |
 | archer    | 16/1                    | intel     | 1828.8            |
 | archer    | 64/3                    | intel     | 565.8             |
+```
 
 ---
 ### HemoCell with singularity
