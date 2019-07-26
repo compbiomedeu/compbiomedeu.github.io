@@ -24,7 +24,7 @@ HemoCell is able to simulate blood flow at high shear rates (>1000 s<sup>-1</sup
 : Typical run: XXX – XXX cores
 : Large run: XXXX – 4,096 cores
 
-**System where it runs :**  Cartesius, ???. The code can be compiled on Linux, Mac OS X and Windows 10 using the linux subsystem extension.
+**System where it runs :**  Cartesius, Archer. The code can be compiled on Linux, Mac OS X and Windows 10 using the linux subsystem extension.
 
 **Extra :** The HemoCell framework is available as source code or as singularity image.
 
@@ -49,7 +49,7 @@ The following softwares and libraries are needed to compile and run HemoCell:
 - [ParMetis](http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview) 4.0.3 (Optional)
 - [Palabos 2.0](http://www.palabos.org/index.php)
 
-### Download and patch steps on Cartesius
+### Download and Installation on Cartesius (SURFsara)
 
 1 - Download the most recent tarball from the [official HemoCell website's download page](https://www.hemocell.eu/user_guide/Downloads.html) (e.g. hemocell-2.0.tgz).
 ```bash
@@ -58,7 +58,6 @@ tar xvzf hemocell-2.0.tgz
 cd hemocell-2.0/
 export HEMOCELLROOT=$PWD
 ```
-
 
 2 - Download and patch Palabos
 ```bash
@@ -69,86 +68,48 @@ cd patch && ./patchPLB.sh
 cd ..
 ```
 
-3 - Patch HemoCell's CMakeLists.txt file
-```bash
-cd $HEMOCELLROOT/build/hemocell
-patch -i optim_cmake_flags_lib.patch CMakeLists.txt 
-```
-
-Where `optim_cmake_flags_lib.patch` contains:
-```
-14,15c14,18
-< SET(BUILD_TYPE Release)  # Debug or Release
-< 
----
-> IF(NOT CMAKE_BUILD_TYPE) 
->   SET(CMAKE_BUILD_TYPE "Release" CACHE STRING "Debug or Release")  # Debug or Release
-> ELSE()
->   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Debug or Release")  # Debug or Release
-> ENDIF()
-64,65c67,78
-< SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -std=c++11")
-< SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -Wformat -Wformat-security")
----
-> IF(NOT MARCH)
->   SET(MARCH "-march=native" CACHE STRING "")
-> ELSE()
->   SET(MARCH ${MARCH} CACHE STRING "")
-> ENDIF()
-> IF(${CMAKE_BUILD_TYPE} STREQUAL "Release")
->   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ${MARCH}")
-> ELSE()
->   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -ggdb")
-> ENDIF()
-> SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-> SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security") 
-```
-This makes a difference between `Debug` and `Release` builds, and allows setting custom optimization flags through the `MARCH` variable.
-Now the user can pass -DCMAKE_BUILD_TYPE=<Release or Debug> and -DMARCH=<arch> to cmake.
- A 'Release' build will use the march and optim flags, a 'Debug" build will use '-O0 -ggdb'. The default march is '-march=native', but a different march can be passed to cmake.
-
-### Installation steps using foss toolchain (GNU) on Cartesius
- 
-1 - Load modules to put dependencies in the paths
+3 - Configure HemoCell build options
+Choose a toolchain between foss (GNU) and Intel.
+Here we use the 'CMakeLists.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') using the '-DARCH' flag. The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and '-xHost -axAVX,AVX2,CORE-AVX2,AVX512' for the Intel toolchain.
+Remark: one can add additional flags using variables 'CXXFLAGS' or 'CMAKE_CXX_FLAGS'.
 
 ```bash
+# with foss toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
 module load foss/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
 module load HDF5/1.10.2-foss-2018b
 module load ParMETIS/4.0.3-foss-2018b
 module load h5py/2.8.0-foss-2018b-Python-2.7.15
-```
-
-2 - Compile HemoCell
-```bash
+# configure
 cd $HEMOCELLROOT/build/hemocell
-mkdir ../../install
-cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install  -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DMARCH='-march=sandybridge'
-make
+cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DARCH="cartesius"
 ```
 
-This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/build/hemocell'.
-
-### Installation steps using Intel toolchain on Cartesius
-
-1 - Load modules to put dependencies in the paths
 ```bash
+# with intel toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
 module load intel/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
 module load HDF5/1.10.2-intel-2018b
 module load ParMETIS/4.0.3-intel-2018b
 module load h5py/2.8.0-intel-2018b-Python-2.7.15
-```
-
-5 - Compile HemoCell
-```bash
+# configure
 cd $HEMOCELLROOT/build/hemocell
-mkdir ../../install
-cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HEMOCELLROOT/install  -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DMARCH='-xAVX -axCORE-AVX2' -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc
-make
+CC=icc CXX=icpc cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DARCH="cartesius"
 ```
+This creates the 'Makefile'.
 
-
+4 - Build the library
+```bash
+# build
+make -j4
+```
 This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/build/hemocell'.
 
 ---
@@ -157,75 +118,74 @@ This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/
 
 ### Simple Use case with foss toolchain: oneCellShear
 
-1 - Init environment
+1 - Configure build options
+Here we use the 'CMakeLists_template.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
 ```bash
+cd $HEMOCELLROOT/examples/
+# Update 'CMakeLists.txt' for all testcases with the new 'CMakeLists_template.txt'
+make cmakefiles
+cd $HEMOCELLROOT/examples/oneCellShear
+```
+
+Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+```bash
+# with foss toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
 module load foss/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
 module load HDF5/1.10.2-foss-2018b
 module load ParMETIS/4.0.3-foss-2018b
 module load h5py/2.8.0-foss-2018b-Python-2.7.15
-```
-
-2 - Patch CMakeLists_template.txt
-```bash
-cd $HEMOCELLROOT/examples/
-patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
-```
-
-Where `optim_cmake_flags_examples.patch` contains:
-```
-13c13,17
-< 
----
-> IF(NOT CMAKE_BUILD_TYPE)
->   SET(CMAKE_BUILD_TYPE "Release" CACHE STRING "Debug or Release")  # Debug or Release
-> ELSE()
->   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Debug or Release")  # Debug or Release
-> ENDIF()
-57,58c61,72
-< SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -std=c++11")
-< SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -Wformat -Wformat-security")
----
-> IF(NOT MARCH)
->   SET(MARCH "-march=native" CACHE STRING "")
-> ELSE()
->   SET(MARCH ${MARCH} CACHE STRING "")
-> ENDIF()
-> IF(${CMAKE_BUILD_TYPE} STREQUAL "Release")
->   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ${MARCH}")
-> ELSE()
->   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -ggdb")
-> ENDIF(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-> SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-> SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security")
-```
-This makes a difference between `Debug` and `Release` builds, and allows setting custom optimization flags through the `MARCH` variable.
-
-3 - Update CMakeLists.txt for all testcases
-```bash
-make cmakefiles
-```
-This replaces all <case>/CmakeLists.txt with ./CmakeLists_template.txt to update the build process for all cases.
-
-4 - Compile a single example with optimization flags
-```bash
-cd $HEMOCELLROOT/examples/oneCellShear
+# configure
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-march=sandybridge'
-make
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="cartesius"
+```
+
+```bash
+# with intel toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
+module load intel/2018b
+module load CMake/3.11.4-GCCcore-7.3.0
+module load HDF5/1.10.2-intel-2018b
+module load ParMETIS/4.0.3-intel-2018b
+module load h5py/2.8.0-intel-2018b-Python-2.7.15
+# configure
+mkdir build
+cd build
+CC=icc CXX=icpc cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="cartesius"
+```
+
+2 - Build the example
+```bash
+# build
+make -j4
 cd ..
 ```
-WARNING: this rebuilds/relinks `libhemocell.a`.
+WARNING: this reconfigures/rebuilds/relinks the HemoCell library `libhemocell.a`.
 
-To avoid that, manual compilation and linking of the example is possible:
+To avoid that, manual compilation and linking of the example is possible. However then the predifined architecture-specific optimization flags cannot be used, and one has to set all flags manually.
 ```bash
+# with foss toolchain
 mkdir build
 cd build
 #compilation
-mpicxx  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o oneCellShear.o -c ../oneCellShear.cpp
+mpicxx  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -march=native -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -std=c++11 -O3 -DNDEBUG  -o oneCellShear.o -c ../oneCellShear.cpp
 #linking
-mpicxx -O3 -march=sandybridge -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic oneCellShear.o -o ../oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+mpicxx -march=native -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -std=c++11 -O3 -DNDEBUG  -rdynamic oneCellShear.o -o ../oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+cd ..
+```
+
+```bash
+# with intel toolchain
+#compilation
+mpiicpc  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -xHost -axAVX,AVX2,CORE-AVX2,AVX512 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -std=c++11 -O3 -wd858 -O3 -DNDEBUG -o oneCellShear.o -c ../oneCellShear.cpp
+#linking
+mpicpc -xHost -axAVX,AVX2,CORE-AVX2,AVX512 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -std=c++11 -O3 -wd858 -O3 -DNDEBUG  -rdynamic oneCellShear.o -o ../oneCellShear $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
 cd ..
 ```
 
@@ -234,11 +194,12 @@ cd ..
 cd $HEMOCELLROOT/examples
 make executables
 ```
-WARNING: this rebuilds/relinks `libhemocell.a`..
+WARNING: this reconfigures/rebuilds/relinks `libhemocell.a` and uses default flags.
 
-6 - Run example oneCellShear on Cartesius in a batch job (recommended)
+6 - Run example oneCellShear on Cartesius in a batch job
 
-Here is an example of a submission script for Cartesius:
+Here is an example of a submission script for Cartesius. 
+Use the same toolchain (foss (GNU) or Intel) that was used to build the library and the example.
 ```bash
 #!/bin/bash
 #SBATCH -J hemocell_oneCellShear
@@ -247,15 +208,25 @@ Here is an example of a submission script for Cartesius:
 #SBATCH -o hemocell_oneCellShear_%j.out
 #SBATCH -t 00:10:00
 
-export HEMOCELLROOT=$HOME/CompBioMed/hemocell/hemocell-2.0_foss/
+export HEMOCELLROOT=$HOME/CompBioMed/hemocell/hemocell-2.0/
 
-# load modules
+# load modules for foss toolchain
 module purge
-module load surfsara
+module load surf-devel
+module load 2019
 module load foss/2018b
 module load HDF5/1.10.2-foss-2018b
 module load ParMETIS/4.0.3-foss-2018b
 module load h5py/2.8.0-foss-2018b-Python-2.7.15
+
+# # load modules for intel toolchain
+# module purge
+# module load surf-devel
+# module load 2019
+# module load intel/2018b
+# module load HDF5/1.10.2-intel-2018b
+# module load ParMETIS/4.0.3-intel-2018b
+# module load h5py/2.8.0-intel-2018b-Python-2.7.15
 
 # copy input files to scratch-shared
 export TEMPDIR=`mktemp -d -p /scratch-shared`
@@ -272,7 +243,8 @@ cp -r tmp/  $HEMOCELLROOT/examples/oneCellShear/tmp_$SLURM_JOB_ID
 
 The output of a case is usually written to the <case>/tmp folder. The checkpoints are the .xml and .dat files. When a new checkpoint is created they are moved to .xml.old and ``.dat.old. The hdf5 output is stored per timestep in tmp/hdf5 and the csv output in tmp/csv.
 
-7 - Post processing of the results of example oneCellShear
+
+### Post processing
 
 When the jobs is completed, use 'batchPostProcess.sh' to create XDMF files ('.xmf. extension - http://www.xdmf.org/index.php/Main_Page). XDMF is an XML language that allows one to describe complex objects from a set of datasets (e.g. in HDF5 format), so that the results can be visualized with Paraview (or another visualization tool).
 The 'batchPostProcess.sh' script should be run within the $HEMOCELLROOT/examples/<case> or $HEMOCELLROOT/examples/<case>/tmp directory.
@@ -280,9 +252,20 @@ The 'batchPostProcess.sh' script should be run within the $HEMOCELLROOT/examples
 $HEMOCELLROOT/scripts/batchPostProcess.sh
 ```
 The XDMF files are written in the tmp directory.
-WARNING: what happens when we have multiple 'tmp' directories ? It creates XDMF files in all tmp_* directories.
+When we have multiple 'tmp' directories, it creates the XDMF files in all tmp_* directories.
 
-8 - Visualization of the results of example oneCellShear
+
+
+The script 'hemocell/scripts/CellInfoMergeCSV.sh' merges the CSV output from multiple processors into a single one in the current directory. Use it in the tmp directory like this:
+
+```bash
+cd hemocell/examples/<case>/tmp/
+. ./scripts/CellInfoMergeCSV.sh
+```
+
+see https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source and https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh.
+
+### Visualization
 
 Visualization is usually not done directly on the supercomputer but rather on local machines when possible.
 To copy files back to a local machine, one can use for example 'scp' on a linux machine.
@@ -299,135 +282,288 @@ paraview &
 Then open the XDMF files, and visualize the results of the simulation with Paraview.
 
 
-### Simple use case with intel toolchain: cellCollision_interior_viscosity - with intel toolchain
+---
+### Computation intensive example and benchmarking on Cartesius
+---
 
-1 - init environment
+1 - Download computation intensive example 'hematocrit_33'.
+```bash
+cd $HEMOCELLROOT/examples
+# download from surfdrive
+wget https://surfdrive.surf.nl/files/index.php/s/PvOpsuCv6ROpsYg/download
+mv download performance_testing.tgz
+tar xvzf performance_testing.tgz
+cd performance_testing
+```
+
+2 - Configure build options
+```bash
+# modify 'CMakeLists.txt'
+cp ../CMakeLists_template.txt CMakeLists.txt
+sed -i -e 's/FOLDER_NAME__/performance_testing/g' CMakeLists.txt
+```
+Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+```bash
+# with foss toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
+module load foss/2018b
+module load CMake/3.11.4-GCCcore-7.3.0
+module load HDF5/1.10.2-foss-2018b
+module load ParMETIS/4.0.3-foss-2018b
+module load h5py/2.8.0-foss-2018b-Python-2.7.15
+# configure
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="cartesius"
+```
 
 ```bash
+# with intel toolchain
+# load modules for the dependencies
+module load surf-devel
+module load 2019
 module load intel/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
 module load HDF5/1.10.2-intel-2018b
 module load ParMETIS/4.0.3-intel-2018b
 module load h5py/2.8.0-intel-2018b-Python-2.7.15
-```
-
-2 - Patch CMakeLists_template.txt
-
-```bash
-cd $HEMOCELLROOT/examples/
-patch -i optim_cmake_flags_examples.patch CMakeLists_template.txt
-```
-This is the same patch as above.
-
-3 - Update CMakeLists.txt for all testcases
-
-```bash
-make cmakefiles
-```
-This replaces all <case>/CmakeLists.txt with ./CmakeLists_template.txt to update the build process for all cases.
-
-4 - Compile a single example with optimization flags
-
-```bash
-cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
+# configure
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DMARCH='-xAVX -axCORE-AVX2' -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc
-make
-cd ..
+CC=icc CXX=icpc cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="cartesius"
 ```
-WARNING: this rebuilds/relinks `libhemocell.a`.
 
-To avoid that, manual compilation and linking of the example is possible:
+3 - build
 ```bash
-mkdir build
-cd build
-mpiicpc  -DPLB_MPI_PARALLEL -DPLB_SMP_PARALLEL -DPLB_USE_POSIX  -I$HEMOCELLROOT/palabos/externalLibraries  -I$HEMOCELLROOT/palabos/libraryInterfaces -I$HEMOCELLROOT -I$HEMOCELLROOT/helper -I$HEMOCELLROOT/config -I$HEMOCELLROOT/core -I$HEMOCELLROOT/models -I$HEMOCELLROOT/mechanics -I$HEMOCELLROOT/external  -I$HEMOCELLROOT/IO -I$HEMOCELLROOT/palabos/src  -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -o cellCollision_interior_viscosity.o -c cellCollision_interior_viscosity.cpp
-
-mpiicpc -O3 -xAVX -axCORE-AVX2 -std=c++11 -Wformat -Wformat-security -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-unused-parameter -Wall -Wextra -Werror=format-security -Wno-empty-body -Wno-unused-result -Wno-ignored-qualifiers -DNDEBUG  -rdynamic cellCollision_interior_viscosity.o -o ../cellCollision_interior_viscosity $HEMOCELLROOT/build/hemocell/libhemocell.a -lhdf5 -lsz -lz -ldl -lm -lpthread -lhdf5 -lhdf5_hl -lsz -lz -ldl -lm -lpthread -lhdf5_hl
+make -j4
 cd ..
 ```
 
-5 - Compile all examples with default options (not recommended)
-
-```bash
-cd $HEMOCELLROOT/examples
-make executables
-```
-WARNING: this rebuilds/relinks `libhemocell.a`..
-
-6 - Run example cellCollision_interior_viscosity on Cartesius in a batch job
-
-Here is an example of a submission script for Cartesius:
+4 - Run computation intensive example hematocrit on Cartesius in a batch job
+Here is an example of a submission script for Cartesius. 
+Use the same toolchain (foss (GNU) or Intel) that was used to build the library and the example.
 ```bash
 #!/bin/bash
-#SBATCH -J hemocell_cellCollision_interior_viscosity
-#SBATCH -n 24
+#SBATCH -J hemocell_hematocrit_33_64
+#SBATCH -n 64
 #SBATCH -p normal
-#SBATCH -o hemocell_cellCollision_interior_viscosity_%j.out
-#SBATCH -t 00:10:00
+#SBATCH -o hemocell_hematocrit_33_64_%j.out
+#SBATCH -t 00:30:00
 
-export HEMOCELLROOT=$HOME/CompBioMed/hemocell/hemocell-2.0_intel/
+export HEMOCELLROOT=$HOME/hemocell/hemocell-2.0/
 
-# load modules
-module purge
+# load modules for foss toolchain
 module load surfsara
 module load intel/2018b
 module load HDF5/1.10.2-intel-2018b
 module load ParMETIS/4.0.3-intel-2018b
 module load h5py/2.8.0-intel-2018b-Python-2.7.15
 
+# # load modules for intel toolchain
+# module purge
+# module load surf-devel
+# module load 2019
+# module load intel/2018b
+# module load HDF5/1.10.2-intel-2018b
+# module load ParMETIS/4.0.3-intel-2018b
+# module load h5py/2.8.0-intel-2018b-Python-2.7.15
+
 # copy input files to scratch-shared
 export TEMPDIR=`mktemp -d -p /scratch-shared`
-cd $HEMOCELLROOT/examples/cellCollision_interior_viscosity
-cp cellCollision_interior_viscosity *.xml *.pos $TEMPDIR
+cd $HEMOCELLROOT/examples/performance_testing
+cp configs/config_64.xml hematocrit_33/RBC_HO.pos hematocrit_33/RBC_HO.xml $TEMPDIR
 cd $TEMPDIR
 
-# run simulation
-srun -n 4 $HEMOCELLROOT/examples/cellCollision_interior_viscosity/cellCollision_interior_viscosity config.xml
+srun -n 64 $HEMOCELLROOT/examples/performance_testing/performance_testing config_64.xml
 
-# copy results back to the home directory
-cp -r tmp/  $HEMOCELLROOT/examples/cellCollision_interior_viscosity/tmp_$SLURM_JOB_ID
+cp -r tmp_64/  $HEMOCELLROOT/examples/performance_testing/hematocrit_33/outputs/tmp_$SLURM_JOB_ID
 ```
 
--> fails with "(HemoCell) (AddCellType) (RBC_HO) Cannot enable interior viscosity when INTERIOR_VISCOSITY is not defined at compile time"
-(idem with foss)
-
-### Post processiong
-
-
-see https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source and https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh.
-
-
-hemocell/scripts/batchPostProcess.sh
-
-This scripts uses the *XMF.py files to generate all necessary xmf-files so that the output of a job can be read into ParaView and others. This script should be run within the hemocell/examples/<case> or hemocell/examples/<case>/tmp directory. like so:
-
-cd hemocell/examples/<case>
-../../scripts/batchPostProcess.sh
-
-
-hemocell/scripts/CellInfoMergeCSV.sh
-
-This script merges the CSV output from multiple processors into a single one in the current directory. Use it in the tmp directory like this:
-
-cd hemocell/examples/<case>/tmp/
-. ./scripts/CellInfoMergeCSV.sh
+```bash
+# create output directory
+mkdir hematocrit_33/outputs
+# submit job
+sbatch hematocrit_33/hematocrit_33_64_cartesius.sh
+```
 
 ---
-### Benchmarking and scalability of HemoCell on Cartesius
+### HemoCell on Archer (EPCC)
 ---
+Archer is a Cray supercomputer, so the build procedure for Archer has a few differences from the build procedure for Cartesius.
+Moreover, Archer uses the PBS workload manager, whereas Cartesius uses Slurm. So the submission scripts are different too.
 
-TODO
+There is a known problem when compiling HemoCell with the Cray compiler, and we were not able to successfully compile HemoCell with the Cray compiler on Archer.
+So when building HemoCell on Archer we recommend you to use the GNU or Intel compilers.
+
+CMake supports Cray architectures, but option '-DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment' has to be passed to the cmake command so that the compilers are properly set by CMake.
+
+The download, configuration and build procedure is similar to the procedure for Cartesius. We do not show the dowload steps which are identical.
+
+1 - Configure HemoCell build options
+Choose a toolchain between foss (GNU) and Intel.
+Here we use the 'CMakeLists.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') using the '-DARCH' flag. The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and '-xHost -axAVX,AVX2,CORE-AVX2,AVX512' for the Intel toolchain.
+Remark: one can add additional flags using variables 'CXXFLAGS' or 'CMAKE_CXX_FLAGS'.
+
+```bash
+# with foss toolchain
+module swap PrgEnv-cray PrgEnv-gnu
+# load modules for the dependencies
+module load cmake/3.10.2
+module load cray-hdf5-parallel/1.10.0.1
+# configure
+cd /work/d137/d137/maximem/hemocell/hemocell-2.0/
+export HEMOCELLROOT=$PWD
+cd $HEMOCELLROOT/build/hemocell
+cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=0 -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment -DARCH=archer
+```
+
+```bash
+# with intel toolchain
+module swap PrgEnv-cray PrgEnv-intel
+module load gcc   # needed with intel compiler to get the GNU header files for C++11 support
+# load modules for the dependencies
+module load cmake/3.10.2
+module load cray-hdf5-parallel/1.10.0.1
+# configure
+cd /work/d137/d137/maximem/hemocell/hemocell-2.0/
+export HEMOCELLROOT=$PWD
+cd $HEMOCELLROOT/build/hemocell
+cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=0 -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment -DARCH=archer
+```
+This creates the 'Makefile'.
+
+2 - Build the library
+```bash
+# build
+make -j4
+```
+This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/build/hemocell'.
+
+3 - Run computation intensive example
+
+```bash
+cd $HEMOCELLROOT/examples
+# download from surfdrive
+wget https://surfdrive.surf.nl/files/index.php/s/PvOpsuCv6ROpsYg/download
+mv download performance_testing.tgz
+tar xvzf performance_testing.tgz
+cd performance_testing
+```
+
+2 - Configure build options
+Using the 'CMakeLists_template.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+```bash
+# modify 'CMakeLists.txt'
+cp ../CMakeLists_template.txt CMakeLists.txt
+sed -i -e 's/FOLDER_NAME__/performance_testing/g' CMakeLists.txt
+```
+Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+```bash
+# with foss toolchain
+module swap PrgEnv-cray PrgEnv-gnu
+# load modules for the dependencies
+module load cmake/3.10.2
+module load cray-hdf5-parallel/1.10.0.1
+# configure
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment -DARCH=archer
+# build
+make -j4
+cd ..
+```
+
+```bash
+# with intel toolchain
+module swap PrgEnv-cray PrgEnv-intel
+module load gcc   # needed with intel compiler to get the GNU header files for C++11 support
+# load modules for the dependencies
+module load cmake/3.10.2
+module load cray-hdf5-parallel/1.10.0.1
+# configure
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment -DARCH=archer
+# build
+make -j4
+cd ..
+```
+
+Example of a submission script for Archer:
+```bash
+#!/bin/bash --login
+
+# PBS -N is the job name (e.g. Example_MPI_Job)
+#PBS -N hematocrit33
+# PBS -l select is the number of nodes requested (e.g. 64 nodes=1536 cores)
+#PBS -l select=3
+# PBS -l walltime, maximum walltime allowed (e.g. 20 minutes)
+#PBS -l walltime=00:30:00
+
+# Replace [budget code] below with your project code (e.g. t01)
+#PBS -A d137-surfsara
+
+
+# load modules for foss toolchain
+module swap PrgEnv-cray PrgEnv-gnu
+module load cray-hdf5-parallel/1.10.0.1
+
+# # load modules for intel toolchain
+# module swap PrgEnv-cray PrgEnv-intel
+# module load gcc   # needed with intel compiler to get the GNU header files for C++11 support
+# module load cray-hdf5-parallel/1.10.0.1
+
+# Make sure any symbolic links are resolved to absolute path
+export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)
+
+# Change to the directory that the job was submitted from
+# (remember this should be on the /work filesystem)
+cd $PBS_O_WORKDIR
+
+# Set the number of threads to 1
+#   This prevents any system libraries from automatically 
+#   using threading.
+export OMP_NUM_THREADS=1
+
+# Launch the parallel job
+aprun -n 64 ../performance_testing ../configs/config_64.xml > hematocrit_33_64_P_$PBS_JOBID.out 2> hematocrit_33_64_P_$PBS_JOBID.err
+
+mv -r tmp_64/  outputs/tmp_$PBS_JOBID
+```
+
+```bash 
+# create output directory
+mkdir hematocrit_33/outputs
+# submit job
+qsub hematocrit_33/hematocrit_33_64.job
+```
+```
 
 ---
 ### Guidelines for efficient parallel programs using HemoCell
 ---
 
-TODO
+We observed discrepancies in the performances of HemoCell when compiled with the foss (GNU) toolchain and with the Intel toolchain.
+We observed significantly better performances when using the foss toolchain (more than 20% of the total runtime on example 'hematocrit_33'), on both Cartesius and Archer.
+So we recommend to use the foss toolchain if possible to get the best performances with HemoCell.
+
+You can check that your installation of HemoCell has the expected performances by running the 'hematocrit_33' example on 3 nodes / 64 cores on Cartesius or Archer and comparing with the following running time:
+| system    | number of nodes / cores | toolchain | running time (s.) |
+|-----------|-------------------------|-----------|-------------------|
+| cartesius | 16/1                    | foss      | 1276.1            |
+| cartesius | 64/3                    | foss      | 439.3             |
+| cartesius | 16/1                    | intel     | 1731.6            |
+| cartesius | 64/3                    | intel     | 521.2             |
+| archer    | 16/1                    | foss      | 1457.2            |
+| archer    | 64/3                    | foss      | 471.9             |
+| archer    | 16/1                    | intel     | 1828.8            |
+| archer    | 64/3                    | intel     | 565.8             |
 
 ---
-### HemoCell with singularity on Cartesius
+### HemoCell with singularity
 ---
 
 TODO
