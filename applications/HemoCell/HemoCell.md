@@ -540,7 +540,6 @@ mkdir hematocrit_33/outputs
 # submit job
 qsub hematocrit_33/hematocrit_33_64.job
 ```
-```
 
 ---
 ### Guidelines for efficient parallel programs using HemoCell
