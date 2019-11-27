@@ -77,7 +77,6 @@ Remark: one can add additional flags using variables 'CXXFLAGS' or 'CMAKE_CXX_FL
 ```bash
 # with foss toolchain
 # load modules for the dependencies
-module load surf-devel
 module load 2019
 module load foss/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
@@ -92,7 +91,6 @@ cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=1 -DARCH="ca
 ```bash
 # with intel toolchain
 # load modules for the dependencies
-module load surf-devel
 module load 2019
 module load intel/2018b
 module load CMake/3.11.4-GCCcore-7.3.0
