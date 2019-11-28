@@ -4,146 +4,39 @@ layout: plain
 
 # Alya - CompBioMed User Guide
 
-**Provider :** [Barcelona Supercomputing Center ](https://www.compbiomed.eu/about/partners/bsc/)
+**Provider :** [**Barcelona Supercomputing Center](https://www.compbiomed.eu/about/partners/bsc/)
 
----
-## Description
----
+Alya is a multi-scale, multi-physics simulation code developed by the team co-lead by Mariano Vazquez and Guillaume Houzeaux at the Barcelona Supercomputing Centre (BSC). The simulations involve the solution of Partial Differential Equations in an unstructured mesh using Finite Elements methods. 
 
-**License :** Limited
+In the context of CompBioMed the code has been used for coupled cardiac fluid-electro-mechanical simulations, from ion-channel kinetics up to organ level; and simulations of the respiratory system, particularly focusing on particle deposition.  
 
-**Target system :**  HPC
+[**Official website**](https://www.bsc.es/research-development/research-areas/engineering-simulations/alya-high-performance-computational)
 
-**Target users :** Academic, Industrial
+[**Official documentation**](http://bsccase02.bsc.es/alya/)
 
-**Type of parallelism :** MPI, OpenMP, Hybrid (MPI+OpenMP), GPUs 
+### Access the code
 
-**Scalability :**	
-: Typical run: 100 – 1,000 cores
-: Large run: 1,000 – 100,000 cores
+**Type:** Source code or Executable
 
-**System where it runs :** Marenostrum (BSC), Archer (EPCC), Cartesius (SURFsara) 
-
-**Extra :** Alya is part of the [PRACE Benchmark Suite](https://repository.prace-ri.eu/git/UEABS/ueabs#alya)
-
----
-## Download and installation
----
-
-### Access mode:
-
-Source code or Executable
-
-Alya source code is available free of charge under collaboration agreement.
+Alya is available for use to researchers at several [HPC systems](https://www.bsc.es/research-development/research-areas/engineering-simulations/alya-high-performance-computational); for clinical and industrial users, BSC recommends users access it as a service, due to the complexity involved with setting up simulations. To this purpose BSC has launched a spin-off ([ELEM Biotech](http://www.elem.bio/)) that will provide commercial software-as-a-service to medical device, pharmaceutical and biomedical industries using Alya.
 
 For more information contact [software@compbiomed.eu](emailto:software@compbiomed.eu)
 
-Alya is written in Fortran and C. It is composed of different modules and is provided with several configurations files to easily build on different architectures. Alya has been tested on several OS, however this documentation refers only to Linux operating systems.
 
+### Technical specification and requirements
 
-### Prerequisites
+The code is written in modern Fortran and C, and its parallelisation is based on mesh partitioning, with MPI as the message passing library for inter-node and tasks level parallelism. In order to improve the efficiency on multi-core shared memory systems, some heavy weight loops are parallelized using [OpenMP](ttps://www.openmp.org/). Both MPI and OpenMP layers can be used at the same time in a hybrid scheme. GPU acceleration is available through the use of [OpenACC](https://www.openacc.org/) directives or [CUDA API](https://docs.nvidia.com/cuda/cuda-runtime-api/index.html), offloading some specific parts of the code, such as some matrix assembly loops or some types of solvers. Alya is also capable of actively using multi-code coupling on top of MPI/OpenMP parallelisation.
 
-To compile an installation of Alya capable to run the provided example, the following software is required:
-- C and Fortran compilers (Intel/GNU)
-- An MPI installation 
-- [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) (optional; internal provided)
+To build Alya from source, the following software is needed:
 
+* [GNU make](https://www.gnu.org/)
+* Fortran and C compilers
+* MPI
+* [METIS](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview.) (optional)
+* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) (optional)
+* [VTK](https://vtk.org/) (optional)
+* [CUDA](https://developer.nvidia.com/cuda-zone) (optional)
 
-### Installation steps
-
-1 - Enter the Executables directory:
-
-```bash
-cd Alya/Execuables/unix
-```
-
-2 - Choose a configuration file:
-
-Intel Fortran compiler
-```bash 
-cp configure.in/config_ifort.in config.in 
-```
-
-GNU Fortran compiler
-```bash 
-cp configure.in/config_gfortran.in config.in 
-```
-
-3 - Configure Alya modules for compilation:
-
-```bash
-./configure nastin solidz parall alefor exmedi
-```
-
-4 - Build Metis library:
-
-```bash
-make metis4
-```
-
-5 - Build Alya:
- 
-```bash
-make
-```
-
-Detailed installation instructions, as well as more information on the configuration files distributed with the code, are available at:
-[http://bsccase02.bsc.es/alya/configure.html](http://bsccase02.bsc.es/alya/configure.html)
-
----
-## Running Alya
----
-
-Alya is able to runs in parallel and scale efficiently up to 100s thousands of cores.
-
-### Input Preparation
-Alya input consists of multiple text files containing description of the physics of the problem and information on the modules which will be used to solve it. Filename (without extension) is common to each file and usually identify the problem.
-
-#### Use case: Elbow (CFD problem)
-Detailed explanation of the problem can be found at: [http://bsccase02.bsc.es/alya/case_elbow.html](http://bsccase02.bsc.es/alya/case_elbow.html)
-
-#### Input files
-
-- [elbow.dat]({{ site.github.repository_url }}/tree/master/applications/Alya/input/elbow.dat)    (case global parameters)
-- [elbow.dom.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.dom.dat) (domain input data)
-- [elbow.geo.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.geo.dat) (mesh information)
-- [elbow.set.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.set.dat) (groups for post-processing, optional)
-- [elbow.fix.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.fix.dat) (boundary conditions data)
-- [elbow.ker.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.ker.dat)
-- [elbow.nsi.dat]({{ site.github.repository_url }}/tree/master/applications/Alya//input/elbow.nsi.dat) (incompressible Navier-Stokes solver parameters)
-
-Download all input files [here](input/elbow.tar.gz).
-
-### Runtime Information
-
-Alya executable is:
-
-    Alya.x
-  
-The path to the directory where Alya installation is located must be added, or include the complete path to Alya.x in the terminal configuration file. 
-
-Serial execution is performed by invoking the Alya.x executable: 
-
-```
-Alya.x elbow
-```
-
-Alya starts reading elbow case input files and runs the simulation. The terminal echoes the tracking of the calculations, listing timstep progression. 
-
-Parallel execution is performed through mpi line command:
-
-```
-mpirun -np N Alya.x elbow
-```
-
-where N is the number of mpi tasks you want to use. 
-
-Note: in all runs there is one master CPU, devoted to conduct the simulation, so that N-1 partitions will be done on the mesh.
-
----
-
-[Offical documentation](http://bsccase02.bsc.es/alya/index.html)
-
----
+The code is highly portable and compatible with most available compilers including GCC, Intel, Cray and IBM XL compilers. There are no specific requirements on type and version of the compiler used, but OpenMP support and vectorisation capabilities can improve drastically the performances of the code. Alya is compatible with variety of MPI implementations, including Intel MPI and OpenMPI, as well as bespoke libraries for specific hardware such as the Cray-MPI library. The external library METIS is mainly used for domain decomposition at the MPI level. A compatible version of the library is shipped with the source to reduce dependencies and facilitate installation procedure avoiding version conflicts. Input data is generally composed of text files with a set format. Input files can be converted into binary inputs within Alya. Output files are post processed using tools within Alya to generate standard format files, like the widely used so-called ensight format that can be visualized with software visualization tools as the open-source viewer [Paraview](https://www.paraview.org/).
 
 [Back](../..)
