@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 # Benchmarks and scalability on Blue Waters (NCSA) 
 
 [Vasquez et al.](https://www.sciencedirect.com/science/article/abs/pii/S1877750315300521) measured Alya’s performance on the Blue Waters (NCSA) HPC system, for two different biomedical problems (incompressible flow in the respiratory system and non-linear solid mechanics coupled with electro-physiology of the human heart) with different mesh resolutions. 
