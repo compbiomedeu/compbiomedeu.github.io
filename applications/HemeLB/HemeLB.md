@@ -56,8 +56,6 @@ HemeLB is specifically designed to efficiently handle sparse topologies, support
 
 ### Benchmarks and code performances
 
-Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
-
 * [**HemeLB strong scaling analysis**](bench_hemelb1.md)
 
 ### Training material and presentations
