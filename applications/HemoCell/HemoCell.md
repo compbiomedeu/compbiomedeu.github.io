@@ -16,9 +16,10 @@ For more information contact [software@compbiomed.eu](emailto:software@compbiome
 
 **Type:** Source code or Executable
 
-HemeCell and Palabos source code and documentation are available through the applications website:
-- [www.hemocell.eu](https://www.hemocell.eu)
-- [palabos.unige.ch/](https://palabos.unige.ch/)
+Hemocell download links can be found on the [official HemoCell website's download page](https://www.hemocell.eu/user_guide/Downloads.html).
+It can be downloaded as a Singularity image, a source code archive, or via the GitHub source code repository.
+
+Palabos source code and documentation are available through the applications website [palabos.unige.ch/](https://palabos.unige.ch/)
 
 ## Technical specification and requirements
 
@@ -54,16 +55,20 @@ For more information on how to get access to an HPC system to run the code check
 HemoCell is computationally capable of handling a large domain size with a high number of cells (10^4-10^6 cells). The code has been used and optimised to run on SURFsara systems Cartesius, Lisa, SuperMUC (LRZ) and Marenostrum IV (BSC). The code showed good performances on all the systems with good weak and strong scaling performances up to ~4,000 cores.
 The framework uses data parallelism to distribute the workload over many compute elements, with Palabos used for the fluid phase simulation, and taking care of the boundary communications between cores, and HemoCell taking care of the cell-based flow and the communications between the two fluid and cell-based parts. The HDF5 library is used for handling I/O.
 
+* [**HemoCell on Cartesius**](hemocell_cart.md)
+* [**HemoCell on ARCHER**](hemocell_epcc.md)
 
-**HemeLB typical HPC usage within the CompBioMed community**
+**HemoCell typical HPC usage within the CompBioMed community**
 
 <img src="spec_table.jpg" width="800"/>
 
 ### Benchmarks and code performances
 
-Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
+The development and porting of the HemoCell framework is between some of the central activities carried out within WP2 and WP5 for the support of exemplar applications and  extension to novel architectures. CompBioMed Core Partner BULL/ATOS (BULL) has worked in collaboration with the developers of the code, to port and optimise a dense cellular suspension flow application, based on HemoCell, to Intel Skylake microarchitecture. This work provided insight of the main bottlenecks in the code parallelisation strategy as well as strong and weak scaling behaviour up to about 2,000 cores. The results suggested a degrading of performances, as the core count increases, due to an uneven distribution of the workload among the different MPI ranks and the relevance of data structures within the code to efficiently exploit core level vectorisation capabilities of modern CPUs. 
 
-* [**HemeLB strong scaling analysis**](bench_hemelb1.md)
+UvA, a CompBioMed Core Partner, has been continuously working to improve load balance within the code and increase communication efficiency of the codebase. In a recent study UvA have showed how the reorganisation of internal data structures and algorithms as well as the use of optimized communications procedures, bring a noticeable improvement of the base performances as well as of the strong scaling behaviour (dividing the same domain into smaller atomic blocks).
+
+
 
 ### Training material and presentations
 
