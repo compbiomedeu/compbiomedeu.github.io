@@ -52,7 +52,7 @@ HemeLB is specifically designed to efficiently handle sparse topologies, support
 
 **HemeLB typical HPC usage within the CompBioMed community**
 
-<img src="spec_table.jpeg" width="400"/>
+<img src="spec_table.jpg" width="800"/>
 
 ### Benchmarks and code performances
 
@@ -63,7 +63,6 @@ Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC
 ### Training material and presentations
 
 Media and training material on HemeLB from the CompBioMed project.
-
 
 * **Application Simple magnetic drug targeting simulations with HemeLB** <br/> 
 [CompBioMed training at VPH2018 – High Performance for the VPH ](https://www.compbiomed.eu/events-2/high-performance-computing-for-the-vph/)
