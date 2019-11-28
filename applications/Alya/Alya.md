@@ -53,43 +53,43 @@ The code is one of the two CFD codes of the Unified European Applications Benchm
 
 **Alya typical HPC usage within the CompBioMed community**
 
-![](spec_table.pdf)
+<img src="spec_table.pdf" />
 
 ### Benchmarks and code performances
 
 Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
 
-[**Benchmarks and scalability on Blue Waters (NCSA)**](bench_ncsa.md)
+* [**Benchmarks and scalability on Blue Waters (NCSA)**](bench_ncsa.md)
 
-[**Performance evaluation on Cartesius (SURFsara)**](bench_surf.md)
+* [**Performance evaluation on Cartesius (SURFsara)**](bench_surf.md)
 
 ### Training material and presentations
 
 Media and training material on Alya from the CompBioMed project.
 
 
-**HPC Multi-scale computational modelling using Alya Red** <br/> 
+* **HPC Multi-scale computational modelling using Alya Red** <br/> 
 [CompBioMed Training: Winter School 2018 at BSC](https://www.compbiomed.eu/events-2/compbiomed-training-winter-school-2018-at-bsc/)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/AcuIrW82Cpg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 --
 
-**The ELEM Biotech Case: Porting Alya to HPC Clouds** <br/>
+* **The ELEM Biotech Case: Porting Alya to HPC Clouds** <br/>
 [CompBioMed containerisation meeting](https://www.compbiomed.eu/events-2/compbiomed-containerisation-meeting/)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/mZPA7jimvf4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 --
 
-**HPC simulations of cardiac electrophysiology using patient specific models** <br/>
+* **HPC simulations of cardiac electrophysiology using patient specific models** <br/>
 [CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-1/)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/pz8yJmClLQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 --
 
-**Sensitivity analysis of a strongly coupled cardiac electro-mechanical model** <br/>
+* **Sensitivity analysis of a strongly coupled cardiac electro-mechanical model** <br/>
 [CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-7/)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/pqDSuQv0Byw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
