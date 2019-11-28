@@ -2,6 +2,8 @@
 layout: plain
 ---
 
+# Optimal installation on Cartesius
+
 HemeLB source code is available for free under the conditions of [LGPL-3.0 license](https://www.gnu.org/licenses/lgpl-3.0.html) through the [HemeLB website](https://www.hemelb.org).
 
 HemeLB is written in C++ and uses professional software engineering techniques to achieve robustness:
