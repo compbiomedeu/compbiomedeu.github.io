@@ -9,7 +9,7 @@ Here, Alya has been compiled by BSC and SURFsara personnel with different optimi
 <p/>
 <br/>
 
-Scalability of Alya on Cartesius system, for an uncoupled problem. Solid mesh: 40M elements. Fluid mesh: 60M elements.*
+Scalability of Alya on Cartesius system, for an uncoupled problem. Solid mesh: 40M elements. Fluid mesh: 60M elements.
 
 
 The figure above shows the strong scaling analysis obtained on Cartesius (SURFsara). The results have been obtained by measuring the speed-up of the uncoupled fluid and solid mechanics simulations for an increasing number of processing elements. For optimised installation an efficiency above 87% was obtained for both models up to 2,000 cores. 
