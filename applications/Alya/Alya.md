@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 # Alya 
 
 **Provider :** [**Barcelona Supercomputing Center**](https://www.compbiomed.eu/about/partners/bsc/)
