@@ -5,6 +5,7 @@ layout: plain
 # HemoCell on Cartesius (SURFsara)
 
 1 - Download the most recent tarball from the [official HemoCell website's download page](https://www.hemocell.eu/user_guide/Downloads.html) (e.g. hemocell-2.0.tgz).
+
 ```bash
 wget https://www.hemocell.eu/user_guide/_downloads/hemocell-2.0.tgz
 tar xvzf hemocell-2.0.tgz
@@ -13,6 +14,7 @@ export HEMOCELLROOT=$PWD
 ```
 
 2 - Download and patch Palabos
+
 ```bash
 wget http://www.palabos.org/images/palabos_releases/palabos-v2.0r0.tgz
 tar xvzf palabos-v2.0r0.tgz 
@@ -21,10 +23,16 @@ cd patch && ./patchPLB.sh
 cd ..
 ```
 
-3 - Configure HemoCell build options
+3 - Configure HemoCell build options:
+
 Choose a toolchain between foss (GNU) and Intel.
-Here we use the 'CMakeLists.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
-One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') using the '-DARCH' flag. The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and '-xHost -axAVX,AVX2,CORE-AVX2,AVX512' for the Intel toolchain.
+
+Here we use the 'CMakeLists.txt' file available on the github repository in branch ```cmakelists_architecture_specific_flags```.
+
+One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') using the '-DARCH' flag. 
+
+The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and ```-xHost -axAVX,AVX2,CORE-AVX2,AVX512``` for the Intel toolchain.
+
 Remark: one can add additional flags using variables 'CXXFLAGS' or 'CMAKE_CXX_FLAGS'.
 
 ```bash
@@ -57,28 +65,27 @@ CC=icc CXX=icpc cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARME
 This creates the 'Makefile'.
 
 4 - Build the library
+
 ```bash
 # build
 make -j4
 ```
-This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/build/hemocell'.
+This creates ```libhemocell.a``` and ```libhemocell_pre_all_deps.a``` in ```$HEMOCELLROOT/build/hemocell```.
 
----
-## Running HemoCell on Cartesius
----
 
 ### Simple Use case with foss toolchain: oneCellShear
 
 1 - Configure build options
-Here we use the 'CMakeLists_template.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+Here we use the 'CMakeLists_template.txt' file available on the github repository in branch ```cmakelists_architecture_specific_flags```.
+
 ```bash
 cd $HEMOCELLROOT/examples/
-# Update 'CMakeLists.txt' for all testcases with the new 'CMakeLists_template.txt'
 make cmakefiles
 cd $HEMOCELLROOT/examples/oneCellShear
 ```
 
 Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+
 ```bash
 # with foss toolchain
 # load modules for the dependencies
@@ -110,6 +117,7 @@ CC=icc CXX=icpc cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="carte
 ```
 
 2 - Build the example
+
 ```bash
 # build
 make -j4
@@ -118,6 +126,7 @@ cd ..
 WARNING: this reconfigures/rebuilds/relinks the HemoCell library `libhemocell.a`.
 
 To avoid that, manual compilation and linking of the example is possible. However then the predifined architecture-specific optimization flags cannot be used, and one has to set all flags manually.
+
 ```bash
 # with foss toolchain
 mkdir build
@@ -139,6 +148,7 @@ cd ..
 ```
 
 5 - Compile all examples with default options (not recommended)
+
 ```bash
 cd $HEMOCELLROOT/examples
 make executables
@@ -149,6 +159,7 @@ WARNING: this reconfigures/rebuilds/relinks `libhemocell.a` and uses default fla
 
 Here is an example of a submission script for Cartesius. 
 Use the same toolchain (foss (GNU) or Intel) that was used to build the library and the example.
+
 ```bash
 #!/bin/bash
 #SBATCH -J hemocell_oneCellShear
@@ -195,9 +206,11 @@ The output of a case is usually written to the <case>/tmp folder. The checkpoint
 
 When the jobs is completed, use 'batchPostProcess.sh' to create XDMF files ('.xmf. extension - http://www.xdmf.org/index.php/Main_Page). XDMF is an XML language that allows one to describe complex objects from a set of datasets (e.g. in HDF5 format), so that the results can be visualized with Paraview (or another visualization tool).
 The 'batchPostProcess.sh' script should be run within the $HEMOCELLROOT/examples/<case> or $HEMOCELLROOT/examples/<case>/tmp directory.
+
 ```bash
 $HEMOCELLROOT/scripts/batchPostProcess.sh
 ```
+
 The XDMF files are written in the tmp directory.
 When we have multiple 'tmp' directories, it creates the XDMF files in all tmp_* directories.
 
@@ -210,30 +223,34 @@ cd hemocell/examples/<case>/tmp/
 . ./scripts/CellInfoMergeCSV.sh
 ```
 
-see https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source and https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh.
+see [https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source](https://www.hemocell.eu/user_guide/QuickStart.html#setting-up-hemocell-from-source) and [https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh](https://www.hemocell.eu/user_guide/Scripts.html#hemocell-scripts-batchpostprocess-sh)
 
 ### Visualization
 
 Visualization is usually not done directly on the supercomputer but rather on local machines when possible.
 To copy files back to a local machine, one can use for example 'scp' on a linux machine.
 From the local machine, open a terminal and run the following command (replacing '<login>' with your actual login on Cartesius, and '/path/to/hemocell/rootdir' with the path to your hemocell root directory on Cartesius).
+
 ```bash
 scp -r <login>@cartesius.surfsara.nl:/home/login/path/to/hemocell/rootdir/examples/oneCellShear/tmp .
 ```
+
 This copies the output directory 'tmp' and all its content to the local machine.
 Now to visualize the results, one can use Paraview.
+
 ```bash
 cd tmp
 paraview &
 ```
+
 Then open the XDMF files, and visualize the results of the simulation with Paraview.
 
 
----
 ### Computation intensive example and benchmarking on Cartesius
----
+
 
 1 - Download computation intensive example 'hematocrit_33'.
+
 ```bash
 cd $HEMOCELLROOT/examples
 # download from surfdrive
@@ -244,12 +261,14 @@ cd performance_testing
 ```
 
 2 - Configure build options
+
 ```bash
 # modify 'CMakeLists.txt'
 cp ../CMakeLists_template.txt CMakeLists.txt
 sed -i -e 's/FOLDER_NAME__/performance_testing/g' CMakeLists.txt
 ```
 Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+
 ```bash
 # with foss toolchain
 # load modules for the dependencies
@@ -281,6 +300,7 @@ CC=icc CXX=icpc cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DARCH="carte
 ```
 
 3 - build
+
 ```bash
 make -j4
 cd ..
@@ -289,6 +309,7 @@ cd ..
 4 - Run computation intensive example hematocrit on Cartesius in a batch job
 Here is an example of a submission script for Cartesius. 
 Use the same toolchain (foss (GNU) or Intel) that was used to build the library and the example.
+
 ```bash
 #!/bin/bash
 #SBATCH -J hemocell_hematocrit_33_64
@@ -332,15 +353,14 @@ mkdir hematocrit_33/outputs
 sbatch hematocrit_33/hematocrit_33_64_cartesius.sh
 ```
 
----
-### Guidelines for efficient parallel programs using HemoCell
----
+#### Guidelines for efficient parallel programs using HemoCell
 
 We observed discrepancies in the performances of HemoCell when compiled with the foss (GNU) toolchain and with the Intel toolchain.
 We observed significantly better performances when using the foss toolchain (more than 20% of the total runtime on example 'hematocrit_33'), on both Cartesius and Archer.
 So we recommend to use the foss toolchain if possible to get the best performances with HemoCell.
 
 You can check that your installation of HemoCell has the expected performances by running the 'hematocrit_33' example on 3 nodes / 64 cores on Cartesius or Archer and comparing with the following running time:
+
 ```
 | system    | number of nodes / cores | toolchain | running time (s.) |
 |-----------|-------------------------|-----------|-------------------|

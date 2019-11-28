@@ -15,9 +15,13 @@ CMake supports Cray architectures, but option '-DCMAKE_SYSTEM_NAME=CrayLinuxEnvi
 The download, configuration and build procedure is similar to the procedure for Cartesius. We do not show the dowload steps which are identical.
 
 1 - Configure HemoCell build options
+
 Choose a toolchain between foss (GNU) and Intel.
-Here we use the 'CMakeLists.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
-One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') using the '-DARCH' flag. The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and '-xHost -axAVX,AVX2,CORE-AVX2,AVX512' for the Intel toolchain.
+Here we use the CMakeLists.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+
+One can use predefined optimisation flags for given set of architectures ('archer', 'cartesius', 'cartesius-haswell', cartesius-broadwell') 
+using the '-DARCH' flag. The default behaviour when this flag is not used is to use '-march=native' for the foss toolchain, and '-xHost -axAVX,AVX2,CORE-AVX2,AVX512' for the Intel toolchain.
+
 Remark: one can add additional flags using variables 'CXXFLAGS' or 'CMAKE_CXX_FLAGS'.
 
 ```bash
@@ -46,13 +50,16 @@ export HEMOCELLROOT=$PWD
 cd $HEMOCELLROOT/build/hemocell
 cmake . -DCMAKE_BUILD_TYPE=Release -DENABLE_MPI=1 -DENABLE_PARMETIS=0 -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment -DARCH=archer
 ```
+
 This creates the 'Makefile'.
 
 2 - Build the library
+
 ```bash
 # build
 make -j4
 ```
+
 This creates 'libhemocell.a' and 'libhemocell_pre_all_deps.a' in '$HEMOCELLROOT/build/hemocell'.
 
 3 - Run computation intensive example
@@ -67,13 +74,18 @@ cd performance_testing
 ```
 
 2 - Configure build options
-Using the 'CMakeLists_template.txt' file available on the github repository in branch 'cmakelists_architecture_specific_flags'.
+
+Using the `CMakeLists_template.txt` file available on the github repository in branch `cmakelists_architecture_specific_flags`.
+
 ```bash
 # modify 'CMakeLists.txt'
 cp ../CMakeLists_template.txt CMakeLists.txt
 sed -i -e 's/FOLDER_NAME__/performance_testing/g' CMakeLists.txt
 ```
+
 Use the same toolchain (foss (GNU) or Intel) that was used to build the library.
+
+
 ```bash
 # with foss toolchain
 module swap PrgEnv-cray PrgEnv-gnu
@@ -106,14 +118,15 @@ cd ..
 ```
 
 Example of a submission script for Archer:
+
 ```bash
 #!/bin/bash --login
 
-# PBS -N is the job name (e.g. Example_MPI_Job)
+#PBS -N is the job name (e.g. Example_MPI_Job)
 #PBS -N hematocrit33
-# PBS -l select is the number of nodes requested (e.g. 64 nodes=1536 cores)
+#PBS -l select is the number of nodes requested (e.g. 64 nodes=1536 cores)
 #PBS -l select=3
-# PBS -l walltime, maximum walltime allowed (e.g. 20 minutes)
+#PBS -l walltime, maximum walltime allowed (e.g. 20 minutes)
 #PBS -l walltime=00:30:00
 
 # Replace [budget code] below with your project code (e.g. t01)
@@ -153,6 +166,28 @@ mkdir hematocrit_33/outputs
 # submit job
 qsub hematocrit_33/hematocrit_33_64.job
 ```
+
+#### Guidelines for efficient parallel programs using HemoCell
+
+We observed discrepancies in the performances of HemoCell when compiled with the foss (GNU) toolchain and with the Intel toolchain.
+We observed significantly better performances when using the foss toolchain (more than 20% of the total runtime on example 'hematocrit_33'), on both Cartesius and Archer.
+So we recommend to use the foss toolchain if possible to get the best performances with HemoCell.
+
+You can check that your installation of HemoCell has the expected performances by running the 'hematocrit_33' example on 3 nodes / 64 cores on Cartesius or Archer and comparing with the following running time:
+
+```
+| system    | number of nodes / cores | toolchain | running time (s.) |
+|-----------|-------------------------|-----------|-------------------|
+| cartesius | 16/1                    | foss      | 1276.1            |
+| cartesius | 64/3                    | foss      | 439.3             |
+| cartesius | 16/1                    | intel     | 1731.6            |
+| cartesius | 64/3                    | intel     | 521.2             |
+| archer    | 16/1                    | foss      | 1457.2            |
+| archer    | 64/3                    | foss      | 471.9             |
+| archer    | 16/1                    | intel     | 1828.8            |
+| archer    | 64/3                    | intel     | 565.8             |
+```
+
 
 ---
 

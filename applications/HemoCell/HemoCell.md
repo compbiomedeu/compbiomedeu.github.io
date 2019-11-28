@@ -69,19 +69,23 @@ The development and porting of the HemoCell framework is between some of the cen
 UvA, a CompBioMed Core Partner, has been continuously working to improve load balance within the code and increase communication efficiency of the codebase. In a recent study UvA have showed how the reorganisation of internal data structures and algorithms as well as the use of optimized communications procedures, bring a noticeable improvement of the base performances as well as of the strong scaling behaviour (dividing the same domain into smaller atomic blocks).
 
 
-
 ### Training material and presentations
 
-Media and training material on HemeLB from the CompBioMed project.
+Media and training material on HemoCell from the CompBioMed project.
 
-* **Application Simple magnetic drug targeting simulations with HemeLB** <br/> 
-[CompBioMed training at VPH2018 – High Performance for the VPH ](https://www.compbiomed.eu/events-2/high-performance-computing-for-the-vph/)
+* **Computational Hemodynamics: From a notebook to HPC** <br/> 
+[PATC: HPC-based simulations, Engineering and Environment with applications in Bioengineering](https://www.bsc.es/education/training/patc-courses/patc-hpc-based-simulations-engineering-and-environment-applications-bioengineering)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/aIedCumP6bw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7DL0QJv7f7s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-* **HemeLB – Simulation of cardiovascular flow on high performance computers** <br/> 
-[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-10)
+* **Application: Cellular blood flow simulations for HPC** <br/> 
+[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-4/)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/WFSMRml_gn4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/364MoJjfNdU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+* **Introduction to Biomedical Applications on High Performance Computers** <br/> 
+[CompBioMed webinar](https://www.youtube.com/watch?v=364MoJjfNdU&feature=emb_title)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tcRMb95yOBA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 [Back](../..)
