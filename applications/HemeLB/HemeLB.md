@@ -40,38 +40,31 @@ The HemeLB computational pipeline take as input an STL file of the surface geome
 
 For more information on how to get access to a system to run the code check the [CompBioMed HPC allocations](https://www.compbiomed.eu/high-performance-computer-allocations/) service.
 
-* [**UCL Tutorial**](example.md): brief tutorial on how to install and run the codes.
+* [**UCL Tutorial**](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/tutorials/): tutorial on how to install and run the code.
 
-* [**BSC examples**](https://gitlab.bsc.es/alya/alya/wikis/Examples): set of examples from the code developers (external).
-
-<!-- * [**Alya on Cartesius (SURFsara)**](Alya/cart.md): guide and script on how to run Alya on Cartesius HPC system. -->
+* [**Optimal installation on Cartesius**](cart_hemelb.md): instructions on how to compile the code on HPC systems.
 
 
+## HemeLB on High Performance Computing systems
 
-## Alya on High Performance Computing systems
+HemeLB is specifically designed to efficiently handle sparse topologies, supports real-time visualization and remote steering of the simulation and can handle fully resolved red blood cells. The code is highly scalable, already running on up to 200,000 cores on several multi-petaflop machines. The code has been installed and tested on ARCHER (EPCC, UEDIN), Cartesius (SURFsara), SuperMUC (LRZ), Prometheus (PSNC) and Blue Waters (NCSA), and it is a flagship code of the [UKCOMES](http://www.ukcomes.org/) project. HemeLB has undergone continuous development within the project, and CompBioMed Core Partner UCL has worked to improve performance (e.g. memory usage and load balance) and execution times for large systems with billions of lattice sites.
 
-Alya has been specifically optimised for the efficient use of supercomputing resources. Combining the use of multiple level of parallelism (MPI, [OpenMP](ttps://www.openmp.org/), [OpenACC](https://www.openacc.org/), etc.) and efficient dynamic load balance techniques, the code is able to exploit both the full power current chips and the large number of compute elements on modern supercomputers.
+**HemeLB typical HPC usage within the CompBioMed community**
 
-The code is one of the two CFD codes of the Unified European Applications Benchmark Suite ([UEBAS](https://repository.prace-ri.eu/git/UEABS/ueabs/)) as well as the Accelerator benchmark suite of PRACE. 
-
-**Alya typical HPC usage within the CompBioMed community**
-
-<img src="spec_table.png" width="500"/>
+<img src="spec_table.jpeg" width="400"/>
 
 ### Benchmarks and code performances
 
 Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
 
-* [**Benchmarks and scalability on Blue Waters (NCSA)**](bench_ncsa.md)
-
-* [**Performance evaluation on Cartesius (SURFsara)**](bench_surf.md)
+* [**HemeLB strong scaling analysis**](bench_hemelb1.md)
 
 ### Training material and presentations
 
-Media and training material on Alya from the CompBioMed project.
+Media and training material on HemeLB from the CompBioMed project.
 
 
-* **HPC Multi-scale computational modelling using Alya Red** <br/> 
+* **HPC Multi-scale computational modelling using HemeLB** <br/> 
 [CompBioMed Training: Winter School 2018 at BSC](https://www.compbiomed.eu/events-2/compbiomed-training-winter-school-2018-at-bsc/)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/AcuIrW82Cpg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
