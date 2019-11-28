@@ -9,6 +9,11 @@ The Alya System is the BSC simulation code for multi-physics problems, specifica
 
 ---
 
+### [HemeLB](./applications/HemeLB/HemeLB.md)
+Software for high performance parallel lattice-Boltzmann simulations for large scale fluid flow in vascular geometries.
+
+---
+
 *More coming soon.*
 
 ---
