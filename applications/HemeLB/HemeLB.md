@@ -65,31 +65,18 @@ Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC
 Media and training material on HemeLB from the CompBioMed project.
 
 
-* **HPC Multi-scale computational modelling using HemeLB** <br/> 
-[CompBioMed Training: Winter School 2018 at BSC](https://www.compbiomed.eu/events-2/compbiomed-training-winter-school-2018-at-bsc/)
+* **Application Simple magnetic drug targeting simulations with HemeLB** <br/> 
+[CompBioMed training at VPH2018 – High Performance for the VPH ](https://www.compbiomed.eu/events-2/high-performance-computing-for-the-vph/)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/AcuIrW82Cpg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
---
-
-* **The ELEM Biotech Case: Porting Alya to HPC Clouds** <br/>
-[CompBioMed containerisation meeting](https://www.compbiomed.eu/events-2/compbiomed-containerisation-meeting/)
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/mZPA7jimvf4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aIedCumP6bw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 --
 
-* **HPC simulations of cardiac electrophysiology using patient specific models** <br/>
-[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-1/)
+* **HemeLB – Simulation of cardiovascular flow on high performance computers** <br/> 
+[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-10)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/pz8yJmClLQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WFSMRml_gn4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 --
-
-* **Sensitivity analysis of a strongly coupled cardiac electro-mechanical model** <br/>
-[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-7/)
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/pqDSuQv0Byw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 --
 
