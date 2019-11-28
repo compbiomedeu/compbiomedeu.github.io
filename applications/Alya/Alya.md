@@ -59,9 +59,9 @@ The code is one of the two CFD codes of the Unified European Applications Benchm
 
 Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
 
-[**Benchmarks and scalability on Blue Waters (NCSA)**](Alya/bench_ncsa.md)
+[**Benchmarks and scalability on Blue Waters (NCSA)**](bench_ncsa.md)
 
-[**Performance evaluation on Cartesius (SURFsara)**](Alya/bench_surf.md)
+[**Performance evaluation on Cartesius (SURFsara)**](bench_surf.md)
 
 ### Training material and presentations
 

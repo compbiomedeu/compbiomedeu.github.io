@@ -1,6 +1,7 @@
 # Performance evaluation on Cartesius (SURFsara) 
 
-On Cartesius, Alya has been compiled by BSC and SURFsara personnel with different optimization flags until the maximum performance was obtained. After that a scalability test with a 100M (40M Solid, 60M Fluid) elements mesh was done. Finally, the bi-ventricular and full heart simulations where computed. 
+Alya is available as module on the Cartesius system (SURFsara).
+Here, Alya has been compiled by BSC and SURFsara personnel with different optimization flags until the maximum performance was obtained. After that a scalability test with a 100M (40M Solid, 60M Fluid) elements mesh was done. Finally, the bi-ventricular and full heart simulations where computed. 
 
 <br/>
 <p align="center">
