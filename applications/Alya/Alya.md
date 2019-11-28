@@ -57,7 +57,7 @@ The code is one of the two CFD codes of the Unified European Applications Benchm
 
 **Alya typical HPC usage within the CompBioMed community**
 
-<img src="spec_table.png" width="500"/>
+<img src="https://github.com/compbiomedeu/compbiomedeu.github.io/blob/master/applications/Alya/spec_table.png" width="500"/>
 
 ### Benchmarks and code performances
 
