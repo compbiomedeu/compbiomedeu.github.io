@@ -2,205 +2,101 @@
 layout: plain
 ---
 
-# [INCOMPLETE PAGE - WORK IN PROGRESS] HemeLB - CompBioMed User Guide
+# HemeLB
 
-**Provider :** [Centre for Computational Science, UCL, London, UK ](http://ccs.chem.ucl.ac.uk/)
+**Provider :** [**University College London**](https://www.compbiomed.eu/about/partners/ucl/)
 
----
-## Description
----
+HemeLB developed by the team of Prof Peter Coveney at University College London (UCL), is a software pipeline that simulates blood flow in vessels in the human brain, in support of clinical neurosurgery. HemeLB is specifically designed to efficiently handle sparse topologies, supports real-time visualization and remote steering of the simulation and can handle fully resolved red blood cells. It runs on petascale platforms, alone and coupled to other codes. The pipeline takes as input an STL file of the surface geometry of the patient, generally obtained via segmentation of [DICOM images](https://www.dicomstandard.org/) from a CT-scan, and HemeLB, the parallel lattice-Boltzmann CFD solver, then simulates the fluid flow within that geometry, using the given velocity-time profiles for each inlet. Once complete, the simulation output is analysed using the hemeXtract utility, which can produce images of cross-sectional flow, or 3D shots of wall shear stress distribution in the geometry using ParaView visualisation software. 
 
-**License :** LGPL v3.0
+For more information contact [software@compbiomed.eu](emailto:software@compbiomed.eu)
 
-**Target system :**  HPC platforms
+## Access the code
 
-**Target users :** Interventional radiologists, ???
+**Type:** Source code or Executable
 
-**Type of parallelism :** MPI
-
-**Scalability :**	
-: Typical run: XXX – XXX cores
-: Large run: XXXX – 300,000 cores
-
-**System where it runs :** Cartesius, ARCHER, Blue Waters
-
-**Extra :** HemeLB is part of the [2020 Science programme](http://www.2020science.net/software/hemelb.html)
-
----
-## Download and installation
----
-
-### Access mode:
-
-The source code is available from https://github.com/UCL/hemelb or 
-https://drive.google.com/file/d/1khFF8vYL6vSS_f_IG1cJ9iO5K7bLCW7M/view?usp=sharing.
-
-HemeLB source code is available for free under the conditions of [LGPL-3.0 license](https://www.gnu.org/licenses/lgpl-3.0.html).
-
-HemeLB is written in C++ and uses professional software engineering techniques to achieve robustness:
-- Test-driven design
-- Agile project management
-- Ticketing (Trac) and continuous integration (Jenkins)
-- Systems programming for deployment (Fabric)
-- Cross-platform build and dependency management (CMake)
-
-### Prerequisites
-
-To compile an installation of HemeLB capable to run the provided example, the following software is required:
-- C and C++ compilers (Intel, GNU)
-- a modern MPI implementation (e.g. Intel, OpenMPI)
-- CMake
-- Zlib
-- [Boost](https://www.boost.org/)
-- [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) 
-- [ParMETIS](http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview)
-- [TinyXML](https://sourceforge.net/projects/tinyxml/)
-- [CPPUnit](https://sourceforge.net/projects/cppunit/)
-- [CTemplate](http://goog-ctemplate.sourceforge.net/)
-
-TinyXML, ParMETIS, CPPUnit, CTemplate, Boost and Zlib are provided with HemeLB sources and can be build during the HemeLB build.
+HemeLB source code and documentation is available through the application website [www.hemelb.org](https://www.hemelb.org).
+The UCL team also provide consulting to biomedical companies and clinical users for the use of the software.
 
 
-### Unoptimized installation steps using included dependencies on Cartesius (not recommended)
+## Technical specification and requirements
 
-1 - Download source code
-First download archive from Google Drive: https://drive.google.com/file/d/1khFF8vYL6vSS_f_IG1cJ9iO5K7bLCW7M/view?usp=sharing, and copy it to Cartesius.
-```bash
-tar xvzf hemelb-pure-vphys.tar.gz
-cd hemelb-pure-vphys/
-export HEMELBROOT=$PWD
-```
+HemeLB is an open source massively parallel lattice-Boltzmann (LB) simulation framework. The main lattice-Boltzman solver is written in C++ and its parallelisation is implemented via MPI. The HemeLB application relies on several external libraries for tasks as XML processing, domain decomposition, unit testing, and real time visualisation.
 
-2 - Build all dependencies (except CMake, zlib, compilers and MPI)
-2.1 - Enter the dependencies directory and create build directory in $HEMELBROOT/dep
-```bash
-cd dep
-mkdir build
-```
+* C and C++ compilers
+* [Cmake](https://cmake.org/)
+* MPI (>=3.0)
+* Zlib
+* Boost
+* ParMETIS
+* TinyXML
+* CPPunit
+* CTemplate
 
-2.2 - Clean module environment and load toolchain (compilers, MPI and most used tools) and CMake modules
-```bash
-module purge
-module load surfsara
-module load foss/2018b    # or intel/2018b
-module load CMake/3.11.4-GCCcore-7.3.0
-```
+HemeLB is compatible with most versions of GCC and Intel compilers and most modern MPI implementations. TinyXML, ParMETIS, CPPUnit, CTemplate, Boost and Zlib are provided with HemeLB sources and can be built during the HemeLB build. 
 
-2.3 - Configure using CMake
-```bash
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DZLIB_LIBRARY=$EBROOTZLIB/lib -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include ..
-```
+## Running HemeLB
 
-2.4 - Build dependencies (they will be installed in $HEMELBROOT/dep/install)
-```bash
-make
-```
+The HemeLB computational pipeline take as input an STL file of the surface geometry of the patient, usually obtained through segmentation of DICOM image files from CT-scans and uses the fully parallelised Palabos’ voxelizer to prepare the geometry for the LB solver. The approach is relatively rapid and with almost no user intervention needed. This is an advantage over traditional CFD methods, which rely on unstructured mesh generation procedures to obtain the discrete representation of the geometry; complex geometries tend to require high levels of user intervention and considerable CPU time to ensure mesh quality. The output of HemeLB can be analysed using the post-processing tool hemeXtract, which is distributed with the code. This utility produces images of different properties (i.e. cross-sectional flow or 3D image of the wall shear stress distribution) which can then be visualised with Paraview.
 
-3 - Build HemeLB using downloaded dependencies
-3.1 - Enter the HemeLB source directory ($HEMELBROOT/src) and create build and install directories
-```bash
-cd ../../src/
-mkdir build
-mkdir install
-```
+For more information on how to get access to a system to run the code check the [CompBioMed HPC allocations](https://www.compbiomed.eu/high-performance-computer-allocations/) service.
 
-3.3 - Configure using CMake
-```bash
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install -DCMAKE_BUILD_TYPE=Release ..
-```
+* [**UCL Tutorial**](example.md): brief tutorial on how to install and run the codes.
 
-3.4 - Build HemeLB and install in the 'install' directory we created ($HEMELBROOT/src/install)
-```bash
-make
-```
-Then the 'hemelb' executable is located in '$HEMELBROOT/src/install/bin'
+* [**BSC examples**](https://gitlab.bsc.es/alya/alya/wikis/Examples): set of examples from the code developers (external).
+
+<!-- * [**Alya on Cartesius (SURFsara)**](Alya/cart.md): guide and script on how to run Alya on Cartesius HPC system. -->
 
 
-### Optimized installation steps using existing modules for the dependencies (recommended)
-#### with foss toochain:
-```bash
-module purge
-module load surfsara
-module load foss/2018b
-module load CMake/3.11.4-GCCcore-7.3.0
-module load ParMETIS/4.0.3-foss-2018b 
-module load Boost/1.67.0-foss-2018b
 
-cd $HEMELBROOT/src
-mkdir build_foss
-mkdir install_foss
-cd build_foss
-cmake -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install_foss -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include ..
-# TinyXML, CPPUnit, Ctemplate will be downloaded and built from source
-make
-make install
-```
+## Alya on High Performance Computing systems
 
-#### with intel toolchain:
-```bash
-module purge
-module load surfsara
-module load intel/2018b
-module load CMake/3.11.4-GCCcore-7.3.0
-module load ParMETIS/4.0.3-intel-2018b 
-module load Boost/1.67.0-intel-2018b
+Alya has been specifically optimised for the efficient use of supercomputing resources. Combining the use of multiple level of parallelism (MPI, [OpenMP](ttps://www.openmp.org/), [OpenACC](https://www.openacc.org/), etc.) and efficient dynamic load balance techniques, the code is able to exploit both the full power current chips and the large number of compute elements on modern supercomputers.
 
-cd $HEMELBROOT/src
-mkdir build_intel
-mkdir install_intel
-cd build_intel
-cmake  -DHEMELB_OPTIMISATION='-O3 -xAVX -axCORE-AVX2' -DHEMELB_USE_SSE3=OFF -DCMAKE_INSTALL_PREFIX=$HEMELBROOT/src/install_intel -DCMAKE_BUILD_TYPE=Release -DPARMETIS_LIBRARY=$EBROOTPARMETIS/lib/libparmetis.a -DPARMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DMETIS_LIBRARY=$EBROOTPARMETIS/lib/libmetis.a -DMETIS_INCLUDE_DIRS=$EBROOTPARMETIS/include -DBoost_DIR=$EBROOTBOOST/lib -DBoost_INCLUDE_DIR=$EBROOTBOOST/include -DZLIB_LIBRARY=$EBROOTZLIB/lib/libz.a -DZLIB_INCLUDE_DIR=$EBROOTZLIB/include -DCMAKE_CXX_COMPILER=$EBROOTICC/bin/icpc -DCMAKE_C_COMPILER=$EBROOTICC/bin/icc ..
-# TinyXML, CPPUnit, Ctemplate will be downloaded and built from source
-make
-make install
-```
+The code is one of the two CFD codes of the Unified European Applications Benchmark Suite ([UEBAS](https://repository.prace-ri.eu/git/UEABS/ueabs/)) as well as the Accelerator benchmark suite of PRACE. 
 
-#### Unit tests:
-WARNING: the unittests do not work.
-       With '-DHEMELB_BUILD_TESTS_UNIT=ON'
-        we get error such as 
-          /home/maximem/CompBioMed/hemelb_google_drive/hemelb-pure-vphys/src/unittests/geometry/NeedsTests.h:221:10: error: ‘tr1’ in namespace ‘std’ does not name a type
-          std::tr1::unordered_set<site_t> inputNeededBlocks;
-        this is due to the use of 'std::tr1' in the tests, which was an extension to the C++03. It was included in C++11, which is used for HemeLB. tr1 is now deprecated (is it?). Does it come from GoogleTest ? (cf. https://github.com/Microsoft/TestAdapterForGoogleTest/issues/119)
+**Alya typical HPC usage within the CompBioMed community**
 
----
-## Running HemeLB on Cartesius
----
-#### unittests
-```bash
-cd $HEMELBROOT/src/unittests
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DHEMELB_DEPENDENCIES_PATH=$HEMELBROOT/dep/ -DHEMELB_DEPENDENCIES_INSTALL_PATH=$HEMELBROOT/dep/install ..
-```
+<img src="spec_table.png" width="500"/>
 
-### Input Preparation
+### Benchmarks and code performances
 
-#### Use case: XXXX
+Alya has been tested by the BSC team, on a large number of Tier-0 and Tier-1 HPC systems. 
 
-#### Input files
+* [**Benchmarks and scalability on Blue Waters (NCSA)**](bench_ncsa.md)
 
-### Runtime Information
+* [**Performance evaluation on Cartesius (SURFsara)**](bench_surf.md)
+
+### Training material and presentations
+
+Media and training material on Alya from the CompBioMed project.
 
 
----
-### Benchmarking and scalability of HemeLB on Cartesius
----
+* **HPC Multi-scale computational modelling using Alya Red** <br/> 
+[CompBioMed Training: Winter School 2018 at BSC](https://www.compbiomed.eu/events-2/compbiomed-training-winter-school-2018-at-bsc/)
 
-TODO
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AcuIrW82Cpg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
----
-### Guidelines for efficient parallel programs using HemeLB
----
+--
 
-TODO
+* **The ELEM Biotech Case: Porting Alya to HPC Clouds** <br/>
+[CompBioMed containerisation meeting](https://www.compbiomed.eu/events-2/compbiomed-containerisation-meeting/)
 
----
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mZPA7jimvf4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-[Offical documentation](https://github.com/UCL/hemelb)
+--
 
----
+* **HPC simulations of cardiac electrophysiology using patient specific models** <br/>
+[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-1/)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pz8yJmClLQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+--
+
+* **Sensitivity analysis of a strongly coupled cardiac electro-mechanical model** <br/>
+[CompBioMed webinar](https://www.compbiomed.eu/compbiomed-webinar-7/)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pqDSuQv0Byw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+--
 
 [Back](../..)
