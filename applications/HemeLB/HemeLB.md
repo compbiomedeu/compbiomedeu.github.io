@@ -26,11 +26,12 @@ HemeLB is an open source massively parallel lattice-Boltzmann (LB) simulation fr
 * [Cmake](https://cmake.org/)
 * MPI (>=3.0)
 * Zlib
-* Boost
-* ParMETIS
-* TinyXML
-* CPPunit
-* CTemplate
+* [Boost](https://www.boost.org/)
+* [METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) 
+* [ParMETIS](http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview)
+* [TinyXML](https://sourceforge.net/projects/tinyxml/)
+* [CPPUnit](https://sourceforge.net/projects/cppunit/)
+* [CTemplate](http://goog-ctemplate.sourceforge.net/)
 
 HemeLB is compatible with most versions of GCC and Intel compilers and most modern MPI implementations. TinyXML, ParMETIS, CPPUnit, CTemplate, Boost and Zlib are provided with HemeLB sources and can be built during the HemeLB build. 
 
