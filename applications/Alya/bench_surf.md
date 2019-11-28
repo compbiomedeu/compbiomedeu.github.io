@@ -14,7 +14,7 @@ Scalability of Alya on Cartesius system, for an uncoupled problem. Solid mesh: 4
 
 The figure above shows the strong scaling analysis obtained on Cartesius (SURFsara). The results have been obtained by measuring the speed-up of the uncoupled fluid and solid mechanics simulations for an increasing number of processing elements. For optimised installation an efficiency above 87% was obtained for both models up to 2,000 cores. 
 
-For more information on how to run Alya on Cartesius (SURFsara) look here.
+<!-- For more information on how to run Alya on Cartesius (SURFsara) look here. -->
 
 --
 
