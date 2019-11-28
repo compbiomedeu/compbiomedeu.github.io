@@ -14,6 +14,11 @@ Software for high performance parallel lattice-Boltzmann simulations for large s
 
 ---
 
+### [HemoCell](./applications/HemoCell/HemoCell.md)
+HemoCell is a framework for simulating dense suspensions of deformable cells, focusing on blood. 
+
+---
+
 *More coming soon.*
 
 ---
