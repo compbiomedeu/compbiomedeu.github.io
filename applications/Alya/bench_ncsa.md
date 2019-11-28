@@ -6,8 +6,11 @@
 <p align="center">
 <img src="alya_bench1.png" width="400"/>
 <p/>
-Strong scalability and efficiency plot for a respiratory system problem. For details see [Vasquez et al.](https://www.sciencedirect.com/science/article/abs/pii/S1877750315300521)
 <br/>
+
+Strong scalability and efficiency plot for a respiratory system problem. 
+For details see [Vasquez et al.](https://www.sciencedirect.com/science/article/abs/pii/S1877750315300521)
+
 
 The results show an almost linear scalability up to a hundred thousand cores for the problem with larger mesh size and excellent scalability, with a 0.8 efficiency maintained up to 30K and 60K cores for respiratory and cardiac problem respectively.  
 
