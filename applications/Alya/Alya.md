@@ -41,9 +41,9 @@ Alya is currently installed and available to research users on Marenostrum IV (B
 
 For more information check the [CompBioMed HPC allocations](https://www.compbiomed.eu/high-performance-computer-allocations/) service.
 
-* [**CompBioMed Tutorial**](example.md): brief tutorial on how to install and run the codes.
+* [CompBioMed Tutorial](example.md): brief tutorial on how to install and run the codes.
 
-* [**BSC examples**](https://gitlab.bsc.es/alya/alya/wikis/Examples): set of examples from the code developers (external).
+* [BSC examples](https://gitlab.bsc.es/alya/alya/wikis/): set of examples from the code developers (external).
 
 <!-- * [**Alya on Cartesius (SURFsara)**](Alya/cart.md): guide and script on how to run Alya on Cartesius HPC system. -->
 
