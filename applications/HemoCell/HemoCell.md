@@ -55,8 +55,8 @@ For more information on how to get access to an HPC system to run the code check
 HemoCell is computationally capable of handling a large domain size with a high number of cells (10^4-10^6 cells). The code has been used and optimised to run on SURFsara systems Cartesius, Lisa, SuperMUC (LRZ) and Marenostrum IV (BSC). The code showed good performances on all the systems with good weak and strong scaling performances up to ~4,000 cores.
 The framework uses data parallelism to distribute the workload over many compute elements, with Palabos used for the fluid phase simulation, and taking care of the boundary communications between cores, and HemoCell taking care of the cell-based flow and the communications between the two fluid and cell-based parts. The HDF5 library is used for handling I/O.
 
-* [**HemoCell on Cartesius**](hemocell_cart.md)
-* [**HemoCell on ARCHER**](hemocell_epcc.md)
+* [HemoCell on Cartesius](hemocell_cart.md)
+* [HemoCell on ARCHER](hemocell_epcc.md)
 
 **HemoCell typical HPC usage within the CompBioMed community**
 
