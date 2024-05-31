@@ -18,6 +18,6 @@ The GPU version of HemeLB has been used extensively on Frontier the world’s on
 
 The figure below shows the strong scaling performance of HemeLB_GPU (with pressure boundary conditions) using different vascular models on both Frontier and Crusher. 
 
-<img src="d44fig1.jpg" width="800"/>
+<img src="d44fig1.png" width="800"/>
 
 Three vascular models were tested: the right leg vascular model and the Circle of Willis (CoW) vascular model at resolutions of 15 $\mu$m and 6.4 $\mu$m, respectively. These models consist of lattice sites ranging from 5.2 x $10^{7}$ to 1.1 x $10^{10}$ and ran for 10,000 time-steps. To exploit the potential for exascale computing here, we have further tested pipe flow scaling with 3.9 x $10^{10}$ lattice sites. In the optimal scaling region, HemeLB_GPU demonstrates a single-node performance of approximately 4000 million lattice updates per second (MLUPS). This performance exhibits linear strong scaling with the number of nodes until degradation sets in due to the problem size. We have also demonstrated continued strong scaling behaviour on up to 87% of the full Frontier system (8192 AMD nodes).
