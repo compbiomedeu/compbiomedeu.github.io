@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 ```bash
 !/bin/bash
 ## Compilation/build script for HEMELB
@@ -56,5 +60,5 @@ cd ../..
 
 BuildDep
 BuildSource
-```
 echo "Done build all"
+```
