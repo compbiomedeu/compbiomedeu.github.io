@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 # HemeLB
 
 **Provider :** [**University College London**](https://www.compbiomed.eu/about/partners/ucl/)
@@ -12,7 +16,7 @@ This was tested on several Nvidia and AMD GPUs such as A100 and MI250. We have o
 
 Within the CPU code, hybrid parallelism (OpenMP+MPI) has been implemented to investigate its ability to execute on larger core counts. On Fugaku, this implementation allowed us to conduct simulations on 480,000 CPU cores; however (and as expected), the scaling behaviour was not as good as in the pure MPI version. 
 
-## HemeLB_GPU
+## HemeLB (GPU)
 
 The GPU version of HemeLB has been used extensively on Frontier the world’s only exascale machine. In preparation for that, HemeLB was tested on the Crusher development platform. The studies conducted on these machines show the excellent scalability of HemeLB.
 
