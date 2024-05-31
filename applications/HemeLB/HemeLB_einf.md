@@ -53,6 +53,18 @@ Using millions of lattice site updates per second (MLUPS), we can get a normaliz
 
 In the left panel  we observe that the older CPU processors exhibit higher performance per core than the newer AMD processors (Rome, Milan, Genoa). This is evident because the AMD EPYC processors have leveraged more logic cores per socket than older-generation processors. This leads to higher performance per compute node as shown in the right panel, which increases per AMD “Zen” generation. We chose to under-populate the core complexes of the AMD processors to increase the memory bandwidth per process available to HemeLB.
 
+# Running HemeLB on EuroHPC systems
+
+HemeLB has been ported and benchmarked on the EuroHPC systems LUMI (CSC) and Leonardo (CINECA). This section offers detailed instructions on how to build and run HemeLB on these two pre-exascale systems.
+
+### Leonardo (CINECA)
+* Compilation script to compile HemeLB for the Booster partition of Leonardo. Link
+* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. Link
+
+### LUMI (CSC)
+* Compilation script to compile HemeLB for the LUMI-G partition of LUMI. Link
+* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. Link
+
 
 
 
