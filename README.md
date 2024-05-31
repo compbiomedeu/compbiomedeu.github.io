@@ -19,7 +19,7 @@ HemoCell is a framework for simulating dense suspensions of deformable cells, fo
 
 ---
 
-### [HemeLB E-infrastructure usage](.applications/HemeLB/HemeLB_einf.md)
+### [HemeLB E-infrastructure usage](./applications/HemeLB/HemeLB_einf.md)
 E-infrastructure usage for the HemeLB application.
 
 ---
