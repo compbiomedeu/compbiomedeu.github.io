@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=N640_gpn8
@@ -28,3 +32,4 @@ module load GObject-Introspection/1.76.1-cpeAMD-23.09-cray-python3.10
 dtg=$( date +"%Y-%m-%d-%H-%M" )
  
 srun <path_to_HemePure_code_base>/HemePure-GPU/src/build/hemepure_gpu -in <path_to_input>/CoW6um_input_nm.xml -out results_$dtg
+```
