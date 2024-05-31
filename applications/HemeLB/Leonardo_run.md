@@ -1,3 +1,7 @@
+---
+layout: plain
+---
+
 ```bash
 #!/bin/bash
 #SBATCH -p boost_usr_prod
