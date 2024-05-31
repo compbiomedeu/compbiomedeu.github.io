@@ -58,12 +58,12 @@ In the left panel  we observe that the older CPU processors exhibit higher perfo
 HemeLB has been ported and benchmarked on the EuroHPC systems LUMI (CSC) and Leonardo (CINECA). This section offers detailed instructions on how to build and run HemeLB on these two pre-exascale systems.
 
 ### Leonardo (CINECA)
-* Compilation script to compile HemeLB for the Booster partition of Leonardo. [Link](https://github.com/compbiomedeu/compbiomedeu.github.io/blob/master/applications/HemeLB/Leonardo_build.md)
-* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. [Link](https://github.com/compbiomedeu/compbiomedeu.github.io/blob/master/applications/HemeLB/Leonardo_run.md)
+* Compilation script to compile HemeLB for the Booster partition of Leonardo. [Link](./Leonardo_build.md)
+* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. [Link](./Leonardo_run.md)
 
 ### LUMI (CSC)
-* Compilation script to compile HemeLB for the LUMI-G partition of LUMI. [Link](https://github.com/compbiomedeu/compbiomedeu.github.io/blob/master/applications/HemeLB/LUMI_build.md)
-* Submission script to run HemeLB on 640 nodes of LUMI-G partition of LUMI. [Link](https://github.com/compbiomedeu/compbiomedeu.github.io/blob/master/applications/HemeLB/LUMI_run.md)
+* Compilation script to compile HemeLB for the LUMI-G partition of LUMI. [Link](./LUMI_build.md)
+* Submission script to run HemeLB on 640 nodes of LUMI-G partition of LUMI. [Link](./LUMI_run.md)
 
 
 
