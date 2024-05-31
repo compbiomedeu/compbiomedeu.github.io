@@ -1,5 +1,9 @@
+---
+layout: plain
+---
+
 ```bash
- #!/bin/bash
+#!/bin/bash
 ## Compilation/build script for HEMELB
 
 export SOURCE_DIR=$HOME/HemePure-GPU
