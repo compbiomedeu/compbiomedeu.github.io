@@ -4,7 +4,7 @@ layout: plain
 
 # HemeLB
 
-**Provider :** [**University College London**](https://www.compbiomed.eu/about/partners/ucl/)
+**Provider :** [**University College London**](https://www.compbiomed.eu/about/compbiomed2-core-partners/ucl/)
 
 ## Building HemeLB
 
