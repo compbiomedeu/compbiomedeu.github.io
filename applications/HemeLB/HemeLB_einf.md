@@ -28,16 +28,29 @@ In summary, both the Functor and DPCT versions of the code have been run on Inte
 
 Additional strong scaling studies were performed of both HemeLB-CPU and HemeLB-GPU on multiple partitions of Snellius (SURF) and LUMI (CSC) supercomputers. In the figure below we highlight the linear scaling behaviour of HemeLB-CPU when simulating the Circle of Willis “small” geometry (CoW15).
 <p align="center">
-<img width="800" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/3efa91fd-91dd-4029-95e9-dde08054ce11">
+<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/3efa91fd-91dd-4029-95e9-dde08054ce11">
 </p>
 
 This geometry has approximately 770 million fluid sites. Simulations were carried out on the Snellius Rome, Genoa, and LUMI-C partitions. In this scaling study we were able to compare the Zen2, Zen3, and Zen4 Generations of the AMD EPYC processors next to each other. In these strong scaling tests, we underpopulated the core-complexes of each compute node using only half of the node cores. This allowed us to increase the available memory bandwidth per MPI process. Additionally, in the Snellius’ simulations, this led to more stable file read and communication operations.
 
 The figure below depicts a similar strong scaling study in a larger geometry, the Circle of Willis “large” (CoW6) which has approximately 10 billion fluid sites. 
 <p align="center">
-<img width="425" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/00127468-fca9-4c78-80c3-c3ae083a212a">
+<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/00127468-fca9-4c78-80c3-c3ae083a212a">
 </p>
-This strong scaling study was carried out with both the GPU and CPU version of HemeLB. We plot the CPU and GPU results side by side, by reporting the number of MPI ranks used in each simulation. For the GPU runs, 1 MPI rank was used per Graphics Compute Die (GCD) of the MI250x of the LUMI-G partition. This means that we used 8 processes per GPU node (4 GPUs per node) per LUMI-G node, with 2 processes per GPU. We observe about 97% linear scaling behaviour of HemeLB-GPU on LUMI-G up to 8190 MI250x GPUs, an impressive result. This is the maximum allowed in the “standard-g” partition of LUMI. The CPU counterpart of these simulations did not exhibit such good scaling behaviour as compared to the GPU runs. We attribute this to the fact that there are many more MPI Ranks per AMD processor compared to the GPU runs, which lead to a substantial communication overhead and competition with other communication  processes that occurred on the LUMI network.
+This strong scaling study was carried out with both the GPU and CPU version of HemeLB. We plot the CPU and GPU results side by side, by reporting the number of MPI ranks used in each simulation. For the GPU runs, 1 MPI rank was used per Graphics Compute Die (GCD) of the MI250x of the LUMI-G partition. This means that we used 8 processes per GPU node (4 GPUs per node) per LUMI-G node, with 2 processes per GPU. We observe about 97% linear scaling behaviour of HemeLB-GPU on LUMI-G up to 8190 MI250x GPUs, an impressive result. This is the maximum allowed in the “standard-g” partition of LUMI. The CPU counterpart of these simulations did not exhibit such good scaling behaviour as compared to the GPU runs. We attribute this to the fact that there are many more MPI Ranks per AMD processor compared to the GPU runs, which lead to a substantial communication overhead and competition with other communication  processes on the LUMI network.
+
+Finally we present the benchmark results of HemeLB  over successive CPU/GPU generations (figure below).
+
+<p align="center">
+<img width="800" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/38d2b0b0-1bf5-48c5-892c-b46254653856">
+</p>
+
+Using millions of lattice site updates per second (MLUPS), we can get a normalized view of the performance of any Lattice Boltzmann code across any compute architecture and geometry size. MLUPS are calculated on a per-node and per-MPI-rank basis.
+
+In the left panel  we observe that the older CPU processors exhibit higher performance per core than the newer AMD processors (Rome, Milan, Genoa). This is evident because the AMD EPYC processors have leveraged more logic cores per socket than older-generation processors. This leads to higher performance per compute node as shown in the right panel, which increases per AMD “Zen” generation. We chose to under-populate the core complexes of the AMD processors to increase the memory bandwidth per process available to HemeLB.
+
+
+
 
 
 
