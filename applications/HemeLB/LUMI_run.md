@@ -1,7 +1,3 @@
----
-layout: plain
----
-
 ```bash
 #!/bin/bash
 #SBATCH --job-name=N640_gpn8
