@@ -59,11 +59,11 @@ HemeLB has been ported and benchmarked on the EuroHPC systems LUMI (CSC) and Leo
 
 ### Leonardo (CINECA)
 * Compilation script to compile HemeLB for the Booster partition of Leonardo. [Link](./Leonardo_build.md)
-* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. Link
+* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. [Link](./Leonardo_run.md)
 
 ### LUMI (CSC)
-* Compilation script to compile HemeLB for the LUMI-G partition of LUMI. Link
-* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. Link
+* Compilation script to compile HemeLB for the LUMI-G partition of LUMI. [Link](./LUMI_build.md)
+* Submission script to run HemeLB on 512 nodes of the Booster partition of Leonardo. [Link](./LUMI_run.md)
 
 
 
