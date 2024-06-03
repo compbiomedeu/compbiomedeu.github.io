@@ -31,6 +31,24 @@ In order to understand this emerging optimization target, we have carried out la
 There was one significant difficulty at scale. Above 120,000 computing processes, the I/O system becomes saturated, which results in a significant overhead in the total wall time. Data is written in parallel, due to its size O(100 GB), and the current system implementations do not seem to be able to handle the high number of parallel write requests well. The data can be saved locally at the nodes with much better performance; however, the same problem will still arise at the end of the simulation when the results need to be copied to a network drive. Furthermore, saving data to a network drive is a requirement for load-balancing, that requires checkpointing the simulation before rebalancing.
 
 
+<p align="center">
+<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/589b671d-d762-4a11-8c91-27bd0d93e7df">
+</p>
+
+The energy consumption (not counting the time spent on I/O operations) seems to be close to linear (see figure above). 
+
+The energy costs of exascale executions will be very substantial. At 330,000 CPU cores, the benchmark run costs approximately 240 kWh. The smallest exascale-range run is three times larger, and a production simulation takes around O(1000) times longer. This very simple linear extrapolation projects an energy cost in the hundreds of thousands of euros for a single exascale execution. Similarly, for the hybrid execution case, the use of efficient hardware instrumentation could prove useful here by lowering the energy costs, for instance by decreasing the frequency of idling cores during I/O operations. 
+
+Furthermore, in collaboration with Eviden (Atos), we are measuring the performance and energy usage of HemoCell on upcoming HPC architectures. The processors included in this investigation are: 
+
+* AMD Epyc Bergamo 9754
+* Intel Sapphire Rapids 9480 + DDR5
+* Intel Sapphire Rapids 9480 + HBM2e
+* Ampere Altra Q8030
+
+The preliminary results suggest significant differences both in energy consumption and in scaling. The ARM-based architecture (Ampere Altra) used significantly less energy compared to the x86-based CPUs (up to a factor 2 difference). At the same time, the scaling efficiency to utilize all 80 cores seems poor. The reason is most likely the lower memory bandwidth (approx. half of the other DDR5 configurations), which with the current benchmark could only support sufficient scaling up to 64 cores. Similarly, the AMD Bergamo-based configuration also showed less than optimal scaling, possibly due to the smaller CPU cache size (i.e., producing many cache misses). This is under further investigation. 
+
+Out of the four configurations the Intel Sapphire Rapids CPU combined with HBM2e memory proved to be the best solution leading to energy efficiency comparable to Ampere (approx. +20% energy), and the highest per node performance (approx. twice the other configurations). The profile analysis of HemoCell shows that this application to the test case used for benchmarking is 50 % CPU-frequency and ~50% CPU memory bandwidth dependent. The application therefore benefits the most from high clock speeds and high memory bandwidth.
 
 ## Deployment and performance engineering
 
