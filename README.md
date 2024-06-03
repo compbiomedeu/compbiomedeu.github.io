@@ -31,3 +31,8 @@ E-infrastructure usage for the Alya application.
 
 ### [Palabos e-infrastructure usage](./applications/Palabos/Palabos_einf.md)
 E-infrastructure usage for the Palabos application.
+
+---
+
+### [HemoCell e-infrastructure usage](./applications/HemoCell/HemoCell_einf.md)
+E-infrastructure usage for the Palabos application.
