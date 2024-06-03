@@ -1,4 +1,4 @@
-![image](https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/fde07017-c11f-4757-a60f-bb609ada40d1)---
+---
 layout: plain
 ---
 
