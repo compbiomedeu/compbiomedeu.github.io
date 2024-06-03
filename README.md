@@ -26,3 +26,6 @@ E-infrastructure usage for the HemeLB application.
 
 ### [Alya e-infrastructure usage](./applications/Alya/Alya_einf.md)
 E-infrastructure usage for the Alya application.
+
+### [Palabos e-infrastructure usage](./applications/Palabos/Palabos_einf.md)
+E-infrastructure usage for the Palabos application.
