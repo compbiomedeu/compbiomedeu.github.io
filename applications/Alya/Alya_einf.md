@@ -7,7 +7,7 @@ layout: plain
 
 **Provider :** [**Barcelona Supercomputing Center**](https://www.compbiomed.eu/about/compbiomed2-core-partners/bsc/)
 
-Supercomputing efficiency of a simulation code is a multiplicative combination of different aspects (Figure 1). 
+Supercomputing efficiency of a simulation code is a multiplicative combination of different aspects. 
 
 <p align="center">
 <img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/d03a191e-adbb-47a6-a27f-e50262097a26">
