@@ -7,6 +7,18 @@ layout: plain
 
 **Provider :** [**Barcelona Supercomputing Center**](https://www.compbiomed.eu/about/compbiomed2-core-partners/bsc/)
 
+Supercomputing efficiency of a simulation code is a multiplicative combination of different aspects (Figure 1). 
+
+<p align="center">
+<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/d473925b-2288-4b6d-b6e5-26d6587974e6">
+</p>
+
+Efficiency is attained by focusing on the different aspects, notably choosing the proper algorithms to implement and their correct implementation. Moreover, due to Amdahl’s Law, eliminating a bottleneck automatically points to the next one, which can be in a different “box”, i.e., by improving an aspect of the Parallel Efficiency one can discover that the next problem is in the Computational Scalability side. 
+
+In the Alya Development Team, shared between the Barcelona Supercomputing Center and its spinoff company ELEM Biotech, we are very aware of this important aspect. We take good care not only on the code accuracy but also on the parallel efficiency. Our cardiac computational model involves fluid mechanics, electrophysiology and solid mechanics of both tissue and biomaterials, all problems tightly coupled. Coupling comes as fluid-solid-interaction, immersed boundary methods, contact problems, or electromechanical coupling, with supplementary solution of particle transport or species concentration. All these problems must be coupled without losing the parallel efficiency of the individual Physics, requiring a specific effort when implementing the coupling schemes. In our case, coupling is based on a staggered multi-code coupling, in which different instances of Alya run using point-to-point MPI communication schemes employing communicators to group the different MPI tasks in an efficient way. Additionally, the different individual instances can run by off-loading part of work onto accelerators such as GPUs. In this way, a multi-physics simulation can run on heterogeneous systems made of CPUs hosting GPUs.
+
+
+
 ## RISC-V vector accelerator
 
 BSC is involved in the development of a RISC-V accelerator, leveraging a wide vector processing unit, in collaboration with the European Processor Initiative (EPI), a European project that conducts research to advance High-Performance Computing (HPC) through the development of European technology. EPI aims to develop a general- purpose processor and a RISC-V-based accelerator. Efficient exploitation of the vector architecture is crucial for harnessing the computational power provided by the new design. 
