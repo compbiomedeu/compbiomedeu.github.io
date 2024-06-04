@@ -10,7 +10,7 @@ layout: plain
 Supercomputing efficiency of a simulation code is a multiplicative combination of different aspects (Figure 1). 
 
 <p align="center">
-<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/d473925b-2288-4b6d-b6e5-26d6587974e6">
+<img width="600" alt="image" src="https://github.com/compbiomedeu/compbiomedeu.github.io/assets/32201263/d03a191e-adbb-47a6-a27f-e50262097a26">
 </p>
 
 Efficiency is attained by focusing on the different aspects, notably choosing the proper algorithms to implement and their correct implementation. Moreover, due to Amdahl’s Law, eliminating a bottleneck automatically points to the next one, which can be in a different “box”, i.e., by improving an aspect of the Parallel Efficiency one can discover that the next problem is in the Computational Scalability side. 
