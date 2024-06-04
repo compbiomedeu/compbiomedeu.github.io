@@ -19,25 +19,10 @@ HemoCell is a framework for simulating dense suspensions of deformable cells, fo
 
 ---
 
-### [HemeLB e-infrastructure usage](./applications/HemeLB/HemeLB_einf.md)
-E-infrastructure usage for the HemeLB application.
+### E-infrastructure best practice
 
----
-
-### [Alya e-infrastructure usage](./applications/Alya/Alya_einf.md)
-E-infrastructure usage for the Alya application.
-
----
-
-### [Palabos e-infrastructure usage](./applications/Palabos/Palabos_einf.md)
-E-infrastructure usage for the Palabos application.
-
----
-
-### [HemoCell e-infrastructure usage](./applications/HemoCell/HemoCell_einf.md)
-E-infrastructure usage for the Palabos application.
-
----
-
-### [BAC e-infrastructure usage](./applications/BAC/TIES_einf.md)
-E-infrastructure usage for the BAC application.
+* #### [HemeLB e-infrastructure usage](./applications/HemeLB/HemeLB_einf.md)
+* #### [Alya e-infrastructure usage](./applications/Alya/Alya_einf.md)
+* #### [Palabos e-infrastructure usage](./applications/Palabos/Palabos_einf.md)
+* #### [HemoCell e-infrastructure usage](./applications/HemoCell/HemoCell_einf.md)
+* #### [BAC e-infrastructure usage](./applications/BAC/TIES_einf.md)
