@@ -36,3 +36,8 @@ E-infrastructure usage for the Palabos application.
 
 ### [HemoCell e-infrastructure usage](./applications/HemoCell/HemoCell_einf.md)
 E-infrastructure usage for the Palabos application.
+
+---
+
+### [BAC e-infrastructure usage](./applications/BAC/TIES_einf.md)
+E-infrastructure usage for the BAC application.
